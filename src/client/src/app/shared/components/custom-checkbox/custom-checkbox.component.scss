@@ -1,0 +1,72 @@
+.checkbox-container {
+  display: block;
+  position: relative;
+  width: 14px;
+  height: 14px;
+
+  // Hide the default checkbox
+  input {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+  }
+
+  // Create a custom checkbox
+  .checkbox-border {
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+    border: 1px solid #666666;
+    border-radius: 2px;
+
+    &:hover {
+      background-color: #E6E6E6;
+    }
+
+    // Create a custom checkmark
+    .checkmark {
+      background-color: #2196F3;
+      height: 100%;
+      width: 100%;
+
+      &:after {
+        content: "";
+        position: absolute;
+        display: block;
+        left: 6px;
+        top: -1px;
+        width: 5px;
+        height: 12px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+      }
+    }
+
+    // Create a custom indeterminate checkmark
+    .indeterminate-checkmark {
+      background-color: #2196F3;
+      height: 100%;
+      width: 100%;
+
+      &:after {
+        content: "";
+        position: absolute;
+        display: block;
+        left: 3px;
+        top: 6px;
+        width: 8px;
+        height: 2px;
+        background-color: white;
+      }
+    }
+  }
+  
+  // Change border color when checked
+  input:checked + .checkbox-border {
+    border: none;
+  }
+}

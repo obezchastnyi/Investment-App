@@ -1,0 +1,11 @@
+<ng-container *ngIf="linkTo; else divTemplate">
+  <a [routerLink]="[linkTo]">
+    <ng-container *ngTemplateOutlet="divTemplate"></ng-container>
+  </a>
+</ng-container>
+
+<ng-template #divTemplate>
+  <div [ngClass]="{ 'first-datatable-col': first, 'datatable-col': !first }">
+    <ng-content></ng-content>
+  </div>
+</ng-template>

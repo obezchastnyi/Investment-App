@@ -1,0 +1,42 @@
+<div class="container login">
+  <div class="row">
+    <div class="col-sm">
+      <img src="/assets/logo.png" width="256" height="256" class="d-inline-block align-top" alt="">
+    </div>
+
+    <div class="col-sm">
+      <form>
+        <div class="form-group">
+          <label for="inputEmail">Username</label>
+          <input class="form-control"
+            [ngClass]="{ 'is-invalid': userNameValidationError !== '' }"
+            type="text"
+            id="inputEmail"
+            placeholder="Email"
+            [(ngModel)]="userName"
+            [ngModelOptions]="{standalone: true}"
+            required>
+          <div class="invalid-feedback">
+            {{ userNameValidationError }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="inputPassword">Password</label>
+          <input class="form-control"
+            [ngClass]="{ 'is-invalid': passwordValidationError !== '' }"
+            type="password"
+            id="inputPassword"
+             placeholder="Password"
+             [(ngModel)]="password"
+             [ngModelOptions]="{standalone: true}">
+          <div class="invalid-feedback">
+            {{ passwordValidationError }}
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" (click)="auth()">Login</button>
+      </form>
+    </div>
+  </div>
+</div>

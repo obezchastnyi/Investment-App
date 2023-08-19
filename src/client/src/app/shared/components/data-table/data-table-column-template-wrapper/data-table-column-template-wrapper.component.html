@@ -1,0 +1,7 @@
+<ng-template #columnTemplate let-row="row" let-value="value" let-isSelected="isSelected"
+  let-onCheckboxChangeFn="onCheckboxChangeFn" let-column="column" let-rowIndex="rowIndex">
+  <ia-data-table-column [first]="first" [linkTo]="getMyLink(row)">
+    <ng-container [ngTemplateOutlet]="innerColumnTemplate"
+      [ngTemplateOutletContext]="{ row, value, isSelected, onCheckboxChangeFn, column, rowIndex }"></ng-container>
+  </ia-data-table-column>
+</ng-template>

@@ -1,0 +1,27 @@
+<!-- https://swimlane.gitbook.io/ngx-datatable/api/table -->
+<ngx-datatable class="data-table"
+  [ngClass]="{ 'needs-scroll-bar': needsToScroll }"
+  [ngStyle]="{ 'height': tableHeight > 0 ? tableHeight + 'px' : null }"
+  [columns]="columns"
+  [rows]="rowsObs | async"
+  [columnMode]="columnMode"
+  [headerHeight]="headerHeight"
+  [rowHeight]="rowHeight"
+  [footerHeight]="footerHeight"
+  [scrollbarV]="needsToScroll"
+  [externalPaging]="externalPaging"
+  [limit]="pageSize"
+  [offset]="currentPageIndex"
+  [selected]="selectedRows"
+  [selectionType]="selectionType"
+  (select)="onSelect($event)"
+  [externalSorting]="externalSorting"
+  [sorts]="defaultSorting"
+  (sort)="onSort($event)"
+  (scroll)="onScroll($event)"
+  (activate)="onActivate($event)" >
+</ngx-datatable>
+
+<ng-template #defaultInnerTemplate let-row="row" let-value="value">
+  <p>{{value}}</p>
+</ng-template>

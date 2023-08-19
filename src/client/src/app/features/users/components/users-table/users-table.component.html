@@ -1,0 +1,38 @@
+<div class="flex-column">
+  <ia-data-table [columnsObs]="usersTableColumnsObs" [rowsObs]="usersTableRowsObs"
+                 [allowScroll]="true" [headerHeight]="50" [rowHeight]="70" [footerHeight]="50" [tableHeight]="tableHeight">
+  </ia-data-table>
+</div>
+
+<ng-template #inputTemplate let-row="row" let-value="value" let-column="column">
+  <div class="input-group mr-3">
+    <input #inpt type="text" class="form-control" placeholder="{{column.name}}"
+           [value]="value"
+           [ngClass]="{ 'is-invalid': inpt.value == '' }"
+           (change)="onInputChange(row, $event.target['value'], column.prop)">
+
+    <div class="invalid-feedback">{{ column.name }} is Empty</div>
+
+    <div class="input-group-append" *ngIf="inpt.value != value && inpt.value != ''">
+      <button type="button" class="btn btn-warning" (click)="inpt.value = value">
+        <img src="/assets/discard.png" width="25" height="25" class="" alt="">
+      </button>
+
+      <button type="button" class="btn btn-info" (click)="onRowUpdate(row, inpt.value, column.prop)">
+        <img src="/assets/save.png" width="25" height="25">
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #dropdownTemplate let-row="row" let-value="value" let-column="column">
+  <div class="dropdown">
+    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+      {{ value }}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <button class="dropdown-item" *ngFor="let role of rolesObs | async;"
+          (click)="onRoleChange(row, role.code)">{{ role.code }}</button>
+    </div>
+  </div>
+</ng-template>
