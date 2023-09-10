@@ -86,7 +86,7 @@ public partial class InvestmentAppDbContext
             new User
             {
                 Id = Guid.NewGuid(),
-                UserName = "Admin",
+                UserName = "Admin-OFR",
                 UserRoleId = roles.First(r => r.Code == UserRoles.Creator.ToString()).Id,
                 // passcode: ofr_pass
                 PasswordHash = "1FDF083EC56DCB80969048F198F2E6EB5AF57C27268204F4426825A5911DD1C9:B88C83CFA45F673373E19DA810B5367C:50000:SHA256",

@@ -54,8 +54,8 @@ export class ProjectTableComponent implements OnInit {
                 draggable: false,
             },
             {
-                prop: 'sum',
-                name: 'Sum',
+                prop: 'startingInvestmentSum',
+                name: 'Starting Investment Sum',
                 innerTemplate: this.inputTemplate,
                 sortable: true,
                 width: 300,
@@ -95,7 +95,7 @@ export class ProjectTableComponent implements OnInit {
     }
 
     confirmAllUpdates() {
-        if (this.updatedProjects.find(p => p.name == '' || p.sum.toString() == '')) {
+        if (this.updatedProjects.find(p => p.name == '' || p.startingInvestmentSum.toString() == '')) {
             alert('There are invalid fields in Table');
             return;
         }

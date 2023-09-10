@@ -31,7 +31,7 @@ export class ProjectCacheService {
         this.addNewDataToApi({
             id: '',
             name: `New Item ${this.loadedProjectsSub.value.length + 1}`,
-            sum: 0
+            startingInvestmentSum: 0
         });
     }
 
@@ -39,7 +39,7 @@ export class ProjectCacheService {
         let row = this.loadedProjectsSub.value
             .find(p => p.id == project.id);
 
-        row.sum = project.sum;
+        row.startingInvestmentSum = project.startingInvestmentSum;
         row.name = project.name;
 
         this.updateDataByApi(project);
@@ -57,7 +57,7 @@ export class ProjectCacheService {
         this.http.put(`${this.serverUrl}project`, {
             id: project.id,
             name: project.name,
-            sum: project.sum,
+            startingInvestmentSum: project.startingInvestmentSum,
         }).subscribe(()  => {},
         err => {
             alert('[updateDataByApi] failed');
@@ -88,12 +88,12 @@ export class ProjectCacheService {
         const body = {
             id: project.id,
             name: project.name,
-            sum: project.sum,
+            startingInvestmentSum: project.startingInvestmentSum,
         };
         this.http.post(`${this.serverUrl}project`, {
             id: project.id,
             name: project.name,
-            sum: project.sum,
+            startingInvestmentSum: project.startingInvestmentSum,
         }).subscribe(()  => {
             this.loadDataFromApi();
         },
@@ -109,7 +109,7 @@ export class ProjectCacheService {
             let data: ProjectRow[] = projects.map(p => ({
                 id: p.id.toString(),
                 name: p.name,
-                sum: p.sum,
+                startingInvestmentSum: p.startingInvestmentSum,
             }));
             this.loadedProjectsSub.next(data);
         },
