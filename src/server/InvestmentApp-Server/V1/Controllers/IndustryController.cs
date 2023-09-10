@@ -14,15 +14,15 @@ using Microsoft.Extensions.Logging;
 namespace InvestmentApp.V1.Controllers;
 
 [V1]
-[Route("v{version:apiVersion}/project")]
+[Route("v{version:apiVersion}/industry")]
 [ApiController]
-public class ProjectController : BaseController
+public class IndustryController : BaseController
 {
     private readonly InvestmentAppDbContext _context;
-    private readonly ILogger<ProjectController> _logger;
+    private readonly ILogger<IndustryController> _logger;
 
-    public ProjectController(
-        ILogger<ProjectController> logger, InvestmentAppDbContext context, IPasswordManager passwordManager)
+    public IndustryController(
+        ILogger<IndustryController> logger, InvestmentAppDbContext context, IPasswordManager passwordManager)
         : base(context, passwordManager)
     {
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -30,15 +30,13 @@ public class ProjectController : BaseController
     }
 
     [HttpGet("all")]
-    [ProducesResponseType(typeof(IEnumerable<Project>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<Industry>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
     public IActionResult GetAll()
     {
-        if (this._context.Project != null)
+        if (this._context.Industry != null)
         {
-            return this.Ok(this._context.Project
-                .Include(e => e.Enterprise)
-                .AsNoTracking());
+            return this.Ok(this._context.Industry.AsNoTracking());
         }
 
         this._logger.LogError($"{nameof(Project)} table is empty.");
@@ -46,13 +44,13 @@ public class ProjectController : BaseController
     }
 
     [HttpGet("{id:guid}")]
-    [ProducesResponseType(typeof(Project), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Industry), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
-    public IActionResult GetProject(Guid id)
+    public IActionResult GetIndustry(Guid id)
     {
-        if (this._context.Project != null)
+        if (this._context.Industry != null)
         {
-            var project = this._context.Project.SingleOrDefault(p => p.Id == id);
+            var project = this._context.Industry.SingleOrDefault(p => p.Id == id);
             if (project != null)
             {
                 return this.Ok(project);
@@ -69,12 +67,11 @@ public class ProjectController : BaseController
     [HttpPost("")]
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
-    public IActionResult CreateProject([FromBody] ProjectDto project)
+    public IActionResult CreateIndustry([FromBody] IndustryDto industry)
     {
-        this._context.Project.Add(new Project
+        this._context.Industry.Add(new Industry
         {
-            Name = project.Name,
-            StartingInvestmentSum = project.Sum,
+            Name = industry.Name,
         });
 
         this._context.SaveChanges();
@@ -85,27 +82,22 @@ public class ProjectController : BaseController
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
-    public IActionResult UpdateProject([FromBody] Project project)
+    public IActionResult UpdateIndustry([FromBody] Industry industry)
     {
-        if (project.Id == default)
+        if (industry.Id == default)
         {
             return this.BadRequest();
         }
 
-        var foundProject = this._context.Project.SingleOrDefault(p => p.Id == project.Id);
-        if (foundProject == null)
+        var foundIndustry = this._context.Project.SingleOrDefault(p => p.Id == industry.Id);
+        if (foundIndustry == null)
         {
             return this.NotFound();
         }
 
-        if (!string.IsNullOrEmpty(project.Name))
+        if (!string.IsNullOrEmpty(industry.Name))
         {
-            foundProject.Name = project.Name;
-        }
-
-        if (project.StartingInvestmentSum != default)
-        {
-            foundProject.StartingInvestmentSum = project.StartingInvestmentSum;
+            foundIndustry.Name = industry.Name;
         }
 
         this._context.SaveChanges();
@@ -116,9 +108,9 @@ public class ProjectController : BaseController
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
-    public IActionResult UpdateProjects([FromBody] IEnumerable<Project> projects)
+    public IActionResult UpdateIndustries([FromBody] IEnumerable<Industry> industries)
     {
-        var results = projects.Select(this.UpdateProject).ToList();
+        var results = industries.Select(this.UpdateIndustry).ToList();
 
         if (results.SingleOrDefault(r => r.GetType() == typeof(BadRequestResult)) != null)
         {
@@ -136,14 +128,14 @@ public class ProjectController : BaseController
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
-    public IActionResult DeleteProject(Guid id)
+    public IActionResult DeleteIndustry(Guid id)
     {
-        if (this._context.Project != null)
+        if (this._context.Industry != null)
         {
-            var project = this._context.Project.SingleOrDefault(p => p.Id == id);
+            var project = this._context.Industry.SingleOrDefault(p => p.Id == id);
             if (project != null)
             {
-                this._context.Project.Remove(project);
+                this._context.Industry.Remove(project);
                 this._context.SaveChanges();
                 return this.Ok();
             }

@@ -63,7 +63,7 @@ export class UsersCacheService {
             let data: UserRow[] = users.map(u => ({
                 id: u.id.toString(),
                 userName: u.userName,
-                role: roles.find(r => r.id === u.userRoleId)?.code,
+                role: u.userRole.code,
             }));
 
             this.loadedUsersSub.next(data);

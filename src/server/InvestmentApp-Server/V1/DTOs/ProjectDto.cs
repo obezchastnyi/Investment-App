@@ -1,6 +1,6 @@
-﻿namespace InvestmentApp.V1.Models;
+﻿namespace InvestmentApp.V1.DTOs;
 
-public class NewProjecDto
+public class ProjectDto
 {
     public string Name { get; set; }
 

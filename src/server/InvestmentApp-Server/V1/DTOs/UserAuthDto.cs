@@ -1,4 +1,4 @@
-﻿namespace InvestmentApp.V1.Models;
+﻿namespace InvestmentApp.V1.DTOs;
 
 public class UserAuthDto
 {

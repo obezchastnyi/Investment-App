@@ -199,14 +199,14 @@ public partial class InvestmentAppDbContext
             new Project
             {
                 Id = Guid.NewGuid(),
-                Name = "New T-Shirts Collection",
+                Name = "T-Shirts Collection",
                 StartingInvestmentSum = 1000,
                 EnterpriseId = enterprises[0].Id,
             },
             new Project
             {
                 Id = Guid.NewGuid(),
-                Name = "New Soccer Club Tournament",
+                Name = "Soccer Club Tournament",
                 StartingInvestmentSum = 100000000,
                 EnterpriseId = enterprises[1].Id,
             },

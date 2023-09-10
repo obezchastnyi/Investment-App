@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.Json.Serialization;
 using InvestmentApp.DB;
 using InvestmentApp.Interfaces;
 using InvestmentApp.Services;
@@ -86,6 +87,10 @@ public class Startup
     private static void AspNetInitService(IServiceCollection services)
     {
         services.AddMvcCore()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            })
             .AddDataAnnotations()
             .AddApiExplorer()
             .ConfigureApiBehaviorOptions(options =>

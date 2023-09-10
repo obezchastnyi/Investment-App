@@ -1,9 +1,10 @@
-import { DataTableRow } from ".";
+import { DataTableRow, Role } from ".";
 import { Guid } from "guid-typescript";
 
 export interface User {
     id: Guid
     userName: string;
+    userRole: Role;
     userRoleId: number;
 }
 

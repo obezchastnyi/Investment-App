@@ -1,8 +1,0 @@
-<div class="checkbox-container">
-  <input class="form-check-input" type="checkbox"
-         [attr.checked]="isChecked ? 'checked' : isIndeterminate ? 'indeterminate' : null">
-  <div class="checkbox-border" (click)="checkboxClicked($event)">
-    <div class="checkmark" *ngIf="isChecked"></div>
-    <div class="indeterminate-checkmark" *ngIf="!isChecked && isIndeterminate"></div>
-  </div>
-</div>

@@ -6,7 +6,7 @@ using InvestmentApp.DB;
 using InvestmentApp.Entities;
 using InvestmentApp.Interfaces;
 using InvestmentApp.Models.Authentication;
-using InvestmentApp.V1.Models;
+using InvestmentApp.V1.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -39,7 +39,9 @@ public class UserController : BaseController
     {
         if (this._context.User != null)
         {
-            return this.Ok(this._context.User.AsNoTracking());
+            return this.Ok(this._context.User
+                .Include(e => e.UserRole)
+                .AsNoTracking());
         }
 
         this._logger.LogError($"{nameof(InvestmentApp.Models.Authentication.User)} table is empty.");
@@ -90,31 +92,31 @@ public class UserController : BaseController
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
-    public IActionResult UpdateUser([FromBody] UserUpdateDto userDto)
+    public IActionResult UpdateUser([FromBody] User user)
     {
-        if (userDto.Id == default)
+        if (user.Id == default)
         {
             return this.BadRequest();
         }
 
-        var user = this._context.User.SingleOrDefault(u => u.Id == userDto.Id);
-        if (user == null)
+        var foundUser = this._context.User.SingleOrDefault(u => u.Id == user.Id);
+        if (foundUser == null)
         {
             return this.NotFound();
         }
 
-        if (!string.IsNullOrEmpty(userDto.UserName))
+        if (!string.IsNullOrEmpty(user.UserName))
         {
-            user.UserName = userDto.UserName;
+            foundUser.UserName = user.UserName;
         }
 
-        if (userDto.RoleId.HasValue)
+        if (user.UserRoleId != default)
         {
-            var role = this._context.UserRole.SingleOrDefault(u => u.Id == userDto.RoleId);
+            var role = this._context.UserRole.SingleOrDefault(u => u.Id == user.UserRoleId);
             if (role != null)
             {
-                user.UserRole = role;
-                user.UserRoleId = role.Id;
+                foundUser.UserRole = role;
+                foundUser.UserRoleId = role.Id;
             }
         }
 
