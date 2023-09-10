@@ -1,40 +1,40 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { AuthenticationService, PortfolioCacheService } from '../../../../shared/services';
-import { PortfolioRow, DataTableColumn } from '../../../../models';
+import { AuthenticationService, ProjectCacheService } from '../../../../shared/services';
+import { ProjectRow, DataTableColumn } from '../../../../models';
 
 @Component({
-    selector: 'ia-portfolio-table',
-    templateUrl: 'portfolio-table.component.html',
-    styleUrls: ['portfolio-table.component.scss'],
+    selector: 'ia-project-table',
+    templateUrl: 'project-table.component.html',
+    styleUrls: ['project-table.component.scss'],
 })
-export class PortfolioTableComponent implements OnInit {
+export class ProjectTableComponent implements OnInit {
 
     @ViewChild('inputTemplate', { static: true }) inputTemplate: TemplateRef<unknown>;
     @ViewChild('rowDeleteTemplate', { static: true }) rowDeleteTemplate: TemplateRef<unknown>;
 
     tableHeight = window.innerHeight - 180;
 
-    portfoliosTableColumnsObs: Observable<DataTableColumn[]>;
-    portfoliosTableRowsObs: Observable<PortfolioRow[] | null>;
-    updatedPortfolios: PortfolioRow[] = []
+    projectsTableColumnsObs: Observable<DataTableColumn[]>;
+    projectsTableRowsObs: Observable<ProjectRow[] | null>;
+    updatedProjects: ProjectRow[] = []
 
     userName: string;
     role: string;
 
     constructor(private titleService: Title,
-                private dataService: PortfolioCacheService,
+                private dataService: ProjectCacheService,
                 private authService: AuthenticationService
     ) {
-        this.titleService.setTitle('Portfolio - Investments');
+        this.titleService.setTitle('Project - Investments');
 
         this.userName = this.authService.userName;
         this.role = this.authService.role;
     }
 
     ngOnInit(): void {
-        const PORTFOLIO_TABLE_COLUMNS: DataTableColumn[] = [
+        const PROJECT_TABLE_COLUMNS: DataTableColumn[] = [
             {
                 name: '',
                 innerTemplate: this.rowDeleteTemplate,
@@ -63,26 +63,26 @@ export class PortfolioTableComponent implements OnInit {
                 draggable: false,
             },
         ];
-        this.portfoliosTableColumnsObs = new BehaviorSubject<DataTableColumn[]>(PORTFOLIO_TABLE_COLUMNS).asObservable();
-        this.portfoliosTableRowsObs = this.dataService.getTableRows();
+        this.projectsTableColumnsObs = new BehaviorSubject<DataTableColumn[]>(PROJECT_TABLE_COLUMNS).asObservable();
+        this.projectsTableRowsObs = this.dataService.getTableRows();
     }
 
-    onInputChange(row: PortfolioRow, value: any, column: string) {
+    onInputChange(row: ProjectRow, value: any, column: string) {
         let changedRow = {...row};
-        if (this.updatedPortfolios.indexOf(changedRow) === -1) {
-            this.updatedPortfolios.push(changedRow)
+        if (this.updatedProjects.indexOf(changedRow) === -1) {
+            this.updatedProjects.push(changedRow)
         }
 
-        this.updatedPortfolios[(this.updatedPortfolios.indexOf(changedRow))][column] = value;
+        this.updatedProjects[(this.updatedProjects.indexOf(changedRow))][column] = value;
     }
 
-    onRowUpdate(row: PortfolioRow, value: any, column: string) {
+    onRowUpdate(row: ProjectRow, value: any, column: string) {
         let updatedRow = {...row};
         updatedRow[column] = value;
         this.dataService.updateTableRow(updatedRow);
     }
 
-    onRowDelete(row: PortfolioRow) {
+    onRowDelete(row: ProjectRow) {
         this.dataService.confirmRowDeleting(row.id);
     }
 
@@ -95,11 +95,11 @@ export class PortfolioTableComponent implements OnInit {
     }
 
     confirmAllUpdates() {
-        if (this.updatedPortfolios.find(p => p.name == '' || p.sum.toString() == '')) {
+        if (this.updatedProjects.find(p => p.name == '' || p.sum.toString() == '')) {
             alert('There are invalid fields in Table');
             return;
         }
-        this.dataService.confirmAllUpdates(this.updatedPortfolios);
+        this.dataService.confirmAllUpdates(this.updatedProjects);
     }
 
     protected readonly window = window;

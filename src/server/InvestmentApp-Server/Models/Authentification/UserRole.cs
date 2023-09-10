@@ -1,4 +1,4 @@
-﻿namespace InvestmentApp.Models;
+﻿namespace InvestmentApp.Models.Authentication;
 
 public class UserRole
 {

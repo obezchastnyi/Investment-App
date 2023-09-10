@@ -2,7 +2,7 @@
   <div class="mr-3">
       <button type="button" class="btn btn-primary"
               [disabled]="role != 'Admin' && role != 'Creator'"
-              (click)="addNewRow()">Add Portfolio</button>
+              (click)="addNewRow()">Add Project</button>
   </div>
 
   <div class="ml-3">
@@ -19,7 +19,7 @@
 </div>
 
 <div class="flex-column ml-1 mr-1">
-  <ia-data-table [columnsObs]="portfoliosTableColumnsObs" [rowsObs]="portfoliosTableRowsObs"
+  <ia-data-table [columnsObs]="projectsTableColumnsObs" [rowsObs]="projectsTableRowsObs"
                  [allowScroll]="true" [headerHeight]="50" [rowHeight]="70" [tableHeight]="tableHeight" [footerHeight]="50">
   </ia-data-table>
 </div>

@@ -5,6 +5,7 @@ using InvestmentApp.Attributes;
 using InvestmentApp.DB;
 using InvestmentApp.Interfaces;
 using InvestmentApp.Models;
+using InvestmentApp.Models.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

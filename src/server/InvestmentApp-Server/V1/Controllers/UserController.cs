@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using InvestmentApp.Attributes;
 using InvestmentApp.DB;
+using InvestmentApp.Entities;
 using InvestmentApp.Interfaces;
-using InvestmentApp.Models;
+using InvestmentApp.Models.Authentication;
 using InvestmentApp.V1.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -41,7 +42,7 @@ public class UserController : BaseController
             return this.Ok(this._context.User.AsNoTracking());
         }
 
-        this._logger.LogError($"{nameof(InvestmentApp.Models.User)} table is empty.");
+        this._logger.LogError($"{nameof(InvestmentApp.Models.Authentication.User)} table is empty.");
         return this.NotFound();
     }
 
@@ -58,11 +59,11 @@ public class UserController : BaseController
                 return this.Ok(user);
             }
 
-            this._logger.LogError($"{nameof(InvestmentApp.Models.User)} '{id}' has not been found.");
+            this._logger.LogError($"{nameof(InvestmentApp.Models.Authentication.User)} '{id}' has not been found.");
             return this.NotFound();
         }
 
-        this._logger.LogError($"{nameof(InvestmentApp.Models.User)} table is empty.");
+        this._logger.LogError($"{nameof(InvestmentApp.Models.Authentication.User)} table is empty.");
         return this.NotFound();
     }
 
@@ -74,17 +75,14 @@ public class UserController : BaseController
         if (this.Authenticate(user.UserName, user.Password))
         {
             var foundUser = this._context.User
+                .Include(u => u.UserRole)
                 .AsNoTracking()
                 .SingleOrDefault(u => u.UserName == user.UserName);
 
-            var role = this._context.UserRole
-                .AsNoTracking()
-                .SingleOrDefault(r => r.Id == foundUser.UserRoleId);
-
-            return this.Ok(role?.Code);
+            return this.Ok(foundUser.UserRole?.Code);
         }
 
-        this._logger.LogError($"{nameof(InvestmentApp.Models.User)} not found.");
+        this._logger.LogError($"{nameof(InvestmentApp.Models.Authentication.User)} not found.");
         return this.NotFound();
     }
 
@@ -110,9 +108,14 @@ public class UserController : BaseController
             user.UserName = userDto.UserName;
         }
 
-        if (userDto.UserRoleId.HasValue)
+        if (userDto.RoleId.HasValue)
         {
-            user.UserRoleId = userDto.UserRoleId.Value;
+            var role = this._context.UserRole.SingleOrDefault(u => u.Id == userDto.RoleId);
+            if (role != null)
+            {
+                user.UserRole = role;
+                user.UserRoleId = role.Id;
+            }
         }
 
         this._context.SaveChanges();
@@ -124,11 +127,14 @@ public class UserController : BaseController
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
     public IActionResult CreateUser([FromBody] UserDto user)
     {
+        var role = this._context.UserRole.SingleOrDefault(u => u.Id == user.RoleId);
+
         this._context.User.Add(new User
         {
             UserName = user.UserName,
             PasswordHash = this._passwordManager.Hash(user.Password),
-            UserRoleId = user.UserRoleId ?? this._context.UserRole.Single(r => r.Id == 2).Id, // Reader Role
+            UserRole = role ?? this._context.UserRole.Single(r => r.Code == UserRoles.Reader.ToString()),
+            UserRoleId = role.Id
         });
 
         this._context.SaveChanges();

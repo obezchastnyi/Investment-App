@@ -19,6 +19,8 @@ export class HeaderComponent {
     }
 
     logout(): void {
-        this.authService.logout();
+        if (confirm('Do you really want to log out from Investment App?')) {
+            this.authService.logout();
+        }
     }
 }

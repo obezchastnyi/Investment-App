@@ -1,6 +1,6 @@
 ﻿namespace InvestmentApp.V1.Models;
 
-public class NewPortfolioDto
+public class NewProjecDto
 {
     public string Name { get; set; }
 

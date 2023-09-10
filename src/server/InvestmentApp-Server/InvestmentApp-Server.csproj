@@ -62,6 +62,17 @@
     <Compile Update="SwaggerOptions.cs">
       <DependentUpon>Program.cs</DependentUpon>
     </Compile>
+    <Compile Update="DB\AuthenticationContext.cs">
+      <DependentUpon>InvestmentAppDbContext.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
+
+
+
+
+
+
+
+
 
 </Project>

@@ -1,13 +1,13 @@
 import { DataTableRow } from ".";
 import { Guid } from "guid-typescript";
 
-export interface Portfolio {
+export interface Project {
     id: Guid
     name: string;
     sum: number;
 }
 
-export interface PortfolioRow extends DataTableRow {
+export interface ProjectRow extends DataTableRow {
     id: string,
     name: string;
     sum: number;

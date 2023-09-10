@@ -3,14 +3,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InvestmentApp.Models;
 
-public class User
+public class Enterprise
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
 
-    public string UserName { get; set; }
+    public string Name { get; set; }
 
-    public string PasswordHash { get; set; }
+    public string Address { get; set; }
 
-    public int UserRoleId { get; set; }
+    public string BankAccount { get; set; }
+
+    public long TaxNumber { get; set; }
 }

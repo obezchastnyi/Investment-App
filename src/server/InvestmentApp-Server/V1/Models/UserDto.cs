@@ -2,5 +2,5 @@
 
 public class UserDto : UserAuthDto
 {
-    public int? UserRoleId { get; set; }
+    public int? RoleId { get; set; }
 }

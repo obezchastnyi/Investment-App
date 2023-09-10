@@ -1,24 +1,24 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, shareReplay } from 'rxjs';
-import { Portfolio, PortfolioRow } from 'src/app/models';
+import { Project, ProjectRow } from 'src/app/models';
 import { APP_SETTINGS } from '../utils';
 
 @Injectable({
     providedIn: 'root',
 })
-export class PortfolioCacheService {
+export class ProjectCacheService {
 
     serverUrl = `${APP_SETTINGS.SERVER_BASE_URL}${APP_SETTINGS.SERVER_CURRENT_VERSION}`;
 
-    private loadedPortfoliosSub = new BehaviorSubject<PortfolioRow[] | null>(null);
+    private loadedProjectsSub = new BehaviorSubject<ProjectRow[] | null>(null);
 
     constructor(private http: HttpClient) {
         this.loadDataFromApi();
     }
 
-    getTableRows(): Observable<PortfolioRow[]> {
-        return this.loadedPortfoliosSub.asObservable().pipe(
+    getTableRows(): Observable<ProjectRow[]> {
+        return this.loadedProjectsSub.asObservable().pipe(
             shareReplay(1),
         );
     }
@@ -30,42 +30,42 @@ export class PortfolioCacheService {
     addNewTableRow() {
         this.addNewDataToApi({
             id: '',
-            name: `New Item ${this.loadedPortfoliosSub.value.length + 1}`,
+            name: `New Item ${this.loadedProjectsSub.value.length + 1}`,
             sum: 0
         });
     }
 
-    updateTableRow(portfolio: PortfolioRow) {
-        let row = this.loadedPortfoliosSub.value
-            .find(p => p.id == portfolio.id);
+    updateTableRow(project: ProjectRow) {
+        let row = this.loadedProjectsSub.value
+            .find(p => p.id == project.id);
 
-        row.sum = portfolio.sum;
-        row.name = portfolio.name;
+        row.sum = project.sum;
+        row.name = project.name;
 
-        this.updateDataByApi(portfolio);
+        this.updateDataByApi(project);
     }
 
-    confirmAllUpdates(portfolios: PortfolioRow[]): void {
-        this.updateCollectionOfDataByApi(portfolios);
+    confirmAllUpdates(projects: ProjectRow[]): void {
+        this.updateCollectionOfDataByApi(projects);
     }
 
     confirmRowDeleting(id: string) {
         this.deleteRow(id);
     }
 
-    private updateDataByApi(portfolio: PortfolioRow): void {
-        this.http.put(`${this.serverUrl}portfolio`, {
-            id: portfolio.id,
-            name: portfolio.name,
-            sum: portfolio.sum,
+    private updateDataByApi(project: ProjectRow): void {
+        this.http.put(`${this.serverUrl}project`, {
+            id: project.id,
+            name: project.name,
+            sum: project.sum,
         }).subscribe(()  => {},
         err => {
             alert('[updateDataByApi] failed');
         });
     }
 
-    private updateCollectionOfDataByApi(portfolios: PortfolioRow[]): void {
-        this.http.put(`${this.serverUrl}portfolio/all-update`, portfolios)
+    private updateCollectionOfDataByApi(projects: ProjectRow[]): void {
+        this.http.put(`${this.serverUrl}project/all-update`, projects)
             .subscribe(()  => {
                 this.loadDataFromApi();
             },
@@ -75,7 +75,7 @@ export class PortfolioCacheService {
     }
 
     private deleteRow(id: string): void {
-        this.http.delete(`${this.serverUrl}portfolio/${id}`)
+        this.http.delete(`${this.serverUrl}project/${id}`)
             .subscribe(()  => {
                 this.loadDataFromApi();
             },
@@ -84,16 +84,16 @@ export class PortfolioCacheService {
             });
     }
 
-    private addNewDataToApi(portfolio: PortfolioRow) {
+    private addNewDataToApi(project: ProjectRow) {
         const body = {
-            id: portfolio.id,
-            name: portfolio.name,
-            sum: portfolio.sum,
+            id: project.id,
+            name: project.name,
+            sum: project.sum,
         };
-        this.http.post(`${this.serverUrl}portfolio`, {
-            id: portfolio.id,
-            name: portfolio.name,
-            sum: portfolio.sum,
+        this.http.post(`${this.serverUrl}project`, {
+            id: project.id,
+            name: project.name,
+            sum: project.sum,
         }).subscribe(()  => {
             this.loadDataFromApi();
         },
@@ -104,14 +104,14 @@ export class PortfolioCacheService {
 
     private getDataFromApi(): void {
         combineLatest([
-            this.http.get(`${this.serverUrl}portfolio/all`) as Observable<Portfolio[]>
-        ]).subscribe(([portfolios]) => {
-            let data: PortfolioRow[] = portfolios.map(p => ({
+            this.http.get(`${this.serverUrl}project/all`) as Observable<Project[]>
+        ]).subscribe(([projects]) => {
+            let data: ProjectRow[] = projects.map(p => ({
                 id: p.id.toString(),
                 name: p.name,
                 sum: p.sum,
             }));
-            this.loadedPortfoliosSub.next(data);
+            this.loadedProjectsSub.next(data);
         },
         err => {
             alert('[getDataFromApi] failed');

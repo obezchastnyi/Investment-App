@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
-import { PortfolioRoutingModule } from './portfolio-routing.module';
-import { PortfolioTableComponent } from '.';
+import { ProjectRoutingModule } from './project-routing.module';
+import { ProjectTableComponent } from '.';
 
 @NgModule({
     declarations: [
-        PortfolioTableComponent,
+        ProjectTableComponent,
     ],
     imports: [
         CommonModule,
-        PortfolioRoutingModule,
+        ProjectRoutingModule,
         SharedModule,
     ],
 })
-export class PortfolioModule { }
+export class ProjectModule { }

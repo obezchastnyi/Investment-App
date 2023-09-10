@@ -3,13 +3,13 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { MainViewComponent } from './core/layout/components/main-view/main-view.component';
 import { AuthenticationComponent } from './core/authentication';
 import { AuthenticatedGuard, NotAuthenticatedGuard } from './core/guards';
-import { PortfolioTableComponent } from './features/portfolio';
+import { ProjectTableComponent } from './features/project';
 import { UsersTableComponent } from './features/users';
-import { PortfolioModule } from './features/portfolio/portfolio.module';
+import { ProjectModule } from './features/project/project.module';
 import { UsersModule } from './features/users/users.module';
 
-export function getPortfolioModule(): any {
-    return PortfolioModule;
+export function getProjectModule(): any {
+    return ProjectModule;
 }
 
 export function getUsersModule(): any {
@@ -31,8 +31,8 @@ export const appRoutes: Routes = [
         },
     },
     {
-        path: 'portfolio',
-        component: PortfolioTableComponent,
+        path: 'project',
+        component: ProjectTableComponent,
         canActivate: [AuthenticatedGuard],
         data : {
             redirectUrl : `/login`,
