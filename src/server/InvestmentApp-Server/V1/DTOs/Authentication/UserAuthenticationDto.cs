@@ -1,6 +1,6 @@
-﻿namespace InvestmentApp.V1.DTOs;
+﻿namespace InvestmentApp.V1.DTOs.Authentication;
 
-public class UserAuthDto
+public class UserAuthenticationDto
 {
     public string UserName { get; set; }
 

@@ -6,13 +6,13 @@ using InvestmentApp.DB;
 using InvestmentApp.Entities;
 using InvestmentApp.Interfaces;
 using InvestmentApp.Models.Authentication;
-using InvestmentApp.V1.DTOs;
+using InvestmentApp.V1.DTOs.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace InvestmentApp.V1.Controllers;
+namespace InvestmentApp.V1.Controllers.Authentication;
 
 [V1]
 [Route("v{version:apiVersion}/user")]
@@ -55,7 +55,10 @@ public class UserController : BaseController
     {
         if (this._context.User != null)
         {
-            var user = this._context.User.SingleOrDefault(u => u.Id == id);
+            var user = this._context.User
+                .AsNoTracking()
+                .SingleOrDefault(u => u.Id == id);
+
             if (user != null)
             {
                 return this.Ok(user);
@@ -72,7 +75,7 @@ public class UserController : BaseController
     [HttpGet("auth")]
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
-    public IActionResult AuthenticateUser([FromQuery] UserAuthDto user)
+    public IActionResult AuthenticateUser([FromQuery] UserAuthenticationDto user)
     {
         if (this.Authenticate(user.UserName, user.Password))
         {
@@ -92,7 +95,7 @@ public class UserController : BaseController
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
-    public IActionResult UpdateUser([FromBody] User user)
+    public IActionResult UpdateUser([FromBody] UserDto user)
     {
         if (user.Id == default)
         {
@@ -110,12 +113,14 @@ public class UserController : BaseController
             foundUser.UserName = user.UserName;
         }
 
-        if (user.UserRoleId != default)
+        if (user.RoleId != default)
         {
-            var role = this._context.UserRole.SingleOrDefault(u => u.Id == user.UserRoleId);
+            var role = this._context.UserRole
+                .AsNoTracking()
+                .SingleOrDefault(u => u.Id == user.RoleId);
+
             if (role != null)
             {
-                foundUser.UserRole = role;
                 foundUser.UserRoleId = role.Id;
             }
         }
@@ -129,14 +134,16 @@ public class UserController : BaseController
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
     public IActionResult CreateUser([FromBody] UserDto user)
     {
-        var role = this._context.UserRole.SingleOrDefault(u => u.Id == user.RoleId);
+        var role = this._context.UserRole
+            .AsNoTracking()
+            .SingleOrDefault(u => u.Id == user.RoleId);
 
         this._context.User.Add(new User
         {
             UserName = user.UserName,
             PasswordHash = this._passwordManager.Hash(user.Password),
-            UserRole = role ?? this._context.UserRole.Single(r => r.Code == UserRoles.Reader.ToString()),
-            UserRoleId = role.Id
+            UserRoleId = role?.Id
+                         ?? this._context.UserRole.Single(r => r.Code == UserRoles.Reader.ToString()).Id,
         });
 
         this._context.SaveChanges();

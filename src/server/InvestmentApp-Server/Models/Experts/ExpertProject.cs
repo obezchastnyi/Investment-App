@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using InvestmentApp.Models.Projects;
 
 namespace InvestmentApp.Models.Experts;
 

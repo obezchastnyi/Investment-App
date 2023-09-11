@@ -1,4 +1,4 @@
-﻿namespace InvestmentApp.V1.DTOs;
+﻿namespace InvestmentApp.V1.DTOs.Industries;
 
 public class IndustryDto
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace InvestmentApp.Models;
+namespace InvestmentApp.Models.Industries;
 
 public class IndustryCriteria
 {

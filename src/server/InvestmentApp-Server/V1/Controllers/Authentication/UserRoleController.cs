@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace InvestmentApp.V1.Controllers;
+namespace InvestmentApp.V1.Controllers.Authentication;
 
 [V1]
 [Route("v{version:apiVersion}/userRole")]
@@ -49,7 +49,10 @@ public class UserRoleController : BaseController
     {
         if (this._context.UserRole != null)
         {
-            var role = this._context.UserRole.SingleOrDefault(r => r.Id == id);
+            var role = this._context.UserRole
+                .AsNoTracking()
+                .SingleOrDefault(r => r.Id == id);
+
             if (role != null)
             {
                 return this.Ok(role);

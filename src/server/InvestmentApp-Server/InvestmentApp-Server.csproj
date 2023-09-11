@@ -53,8 +53,7 @@
       <DependentUpon>appsettings.json</DependentUpon>
     </Content>
   </ItemGroup>
-
-
+  
   <ItemGroup>
     <Compile Update="Startup.cs">
       <DependentUpon>Program.cs</DependentUpon>
@@ -65,14 +64,20 @@
     <Compile Update="DB\AuthenticationContext.cs">
       <DependentUpon>InvestmentAppDbContext.cs</DependentUpon>
     </Compile>
+    <Compile Update="DB\InvestorContext.cs">
+      <DependentUpon>InvestmentAppDbContext.cs</DependentUpon>
+    </Compile>
+    <Compile Update="DB\ExpertContext.cs">
+      <DependentUpon>InvestmentAppDbContext.cs</DependentUpon>
+    </Compile>
+    <Compile Update="DB\ProjectContext.cs">
+      <DependentUpon>InvestmentAppDbContext.cs</DependentUpon>
+    </Compile>
+    <Compile Update="V1\DTOs\UserAuthenticationDto.cs">
+      <DependentUpon>UserDto.cs</DependentUpon>
+    </Compile>
+    <Compile Update="DB\IndustryContext.cs">
+      <DependentUpon>InvestmentAppDbContext.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
-
-
-
-
-
-
-
-
-
 </Project>

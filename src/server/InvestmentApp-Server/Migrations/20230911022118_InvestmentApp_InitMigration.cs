@@ -285,42 +285,72 @@ namespace InvestmentAppServer.Migrations
             migrationBuilder.InsertData(
                 table: "Criteria",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { new Guid("6a537539-3c57-4908-b36d-6594c9cb3dd0"), "Profitability" });
+                values: new object[,]
+                {
+                    { new Guid("01f45a5e-fa67-4236-8335-996267b3a5c4"), "Durability" },
+                    { new Guid("3f406c04-1edb-4ee3-8d50-04f182e27e3f"), "Risk" },
+                    { new Guid("79a4fdb6-5753-492c-b209-ccee9978d3a9"), "Profitability" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Enterprise",
                 columns: new[] { "Id", "Address", "BankAccount", "Name", "TaxNumber" },
                 values: new object[,]
                 {
-                    { new Guid("0e641783-4755-4d6b-bd29-8f1219a592a4"), "Ukraine, Dnipro, Dnipro Region", "UA123789456", "IT Company", 123987456L },
-                    { new Guid("72627cfc-4faf-49cf-a9d4-0066d2a4fad9"), "Ukraine, Kyiv, Kyiv Region", "UA987654321", "Soccer Club", 321987654L },
-                    { new Guid("785cbb0b-5a68-4a80-a184-64672e2a4f64"), "Ukraine, Kharkiv, Kharkiv Region", "UA123456789", "T-Shirts Brand", 987321654L }
+                    { new Guid("8171d63b-ab82-4a4f-9157-82e5d36b9ebd"), "Ukraine, Kharkiv, Kharkiv Region", "UA123456789", "T-Shirts Brand", 987321654L },
+                    { new Guid("aade6a14-a45a-40a9-93a9-9cd1f81fda2c"), "Ukraine, Kyiv, Kyiv Region", "UA987654321", "Soccer Club", 321987654L },
+                    { new Guid("f797b583-bbe5-4d78-92a9-8730ca274faf"), "Ukraine, Dnipro, Dnipro Region", "UA123789456", "IT Company", 123987456L }
                 });
 
             migrationBuilder.InsertData(
                 table: "Expert",
                 columns: new[] { "Id", "CompetenceCoefficient", "MiddleName", "Name", "Specialty", "SurName", "WorkPlace" },
-                values: new object[] { new Guid("6eccd119-f439-4190-af2a-0ae86f1ba775"), 3.0, "John", "Alex", "Math", "Samson", "Science Academy" });
+                values: new object[,]
+                {
+                    { new Guid("075920b4-da0b-42fc-80ad-3c03ecbfe7d2"), 3.0, "John", "Alex", "Math", "Samson", "Science Academy" },
+                    { new Guid("2099f967-2c60-43c1-a7b1-55eeedb26306"), 5.0, "James", "Harry", "Welding", "Potter", "Pipe Industry" },
+                    { new Guid("51268369-dabf-42c8-b31d-803729eb1666"), 9.0, "Markus", "Ray", "IT Software Engineer", "Philips", "Amazon" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Industry",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { new Guid("070bf07f-d429-4041-a4fb-833980bc2784"), "Metallurgy" });
+                values: new object[,]
+                {
+                    { new Guid("1f2ccc2d-ae35-483f-a237-fe23f556e6cd"), "Software Development" },
+                    { new Guid("a3bb9b9c-883f-43f0-bfc8-27a42bf53cc2"), "Science" },
+                    { new Guid("a45131dd-0dce-4a84-8e10-7f6c396a723b"), "Metallurgy" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Investor",
                 columns: new[] { "Id", "Name", "SurName" },
-                values: new object[] { new Guid("efcb778c-285f-4844-b184-c697c1b39c07"), "Fred", "Andrews" });
+                values: new object[,]
+                {
+                    { new Guid("0c26b67f-be4c-4cd6-ad91-786af8ed9460"), "Fred", "Andrews" },
+                    { new Guid("9cf3b6cf-6802-4fc8-a6f0-9a4f44477fd0"), "Joe", "Fig" },
+                    { new Guid("fbd832a5-901e-425d-ab07-982483c854fe"), "Jenna", "Pipe" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Period",
                 columns: new[] { "Id", "DiscountRate", "EndDate", "RiskFreeDiscountRate", "StartDate" },
-                values: new object[] { new Guid("d86b00c7-8029-4db8-a662-fc5e812e2fb1"), 10.0, new DateTimeOffset(new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)), 5.0, new DateTimeOffset(new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)) });
+                values: new object[,]
+                {
+                    { new Guid("5740207b-9feb-468d-9f6f-a318f5cc8548"), 2.0, new DateTimeOffset(new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)), 3.0, new DateTimeOffset(new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)) },
+                    { new Guid("eeef44b4-1d94-448d-b048-cfc8e70ea600"), 10.0, new DateTimeOffset(new DateTime(2026, 8, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -4, 0, 0, 0)), 15.0, new DateTimeOffset(new DateTime(2023, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -4, 0, 0, 0)) },
+                    { new Guid("f7a7438e-5532-4363-b672-660447241a0b"), 17.0, new DateTimeOffset(new DateTime(2033, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)), 21.0, new DateTimeOffset(new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)) }
+                });
 
             migrationBuilder.InsertData(
                 table: "Possibility",
                 columns: new[] { "Id", "Rate" },
-                values: new object[] { new Guid("b150ee68-de97-4b98-b71a-bc8e01dc1a52"), 16.0 });
+                values: new object[,]
+                {
+                    { new Guid("0d838c63-b364-466c-86f4-98e26a951f4b"), 8.0 },
+                    { new Guid("aa625f05-1b1f-47fa-b105-4de6ec523bff"), 3.0 },
+                    { new Guid("ce0cb774-04d6-4f16-b7a2-a3b001afcf79"), 13.0 }
+                });
 
             migrationBuilder.InsertData(
                 table: "UserRole",
@@ -336,21 +366,31 @@ namespace InvestmentAppServer.Migrations
             migrationBuilder.InsertData(
                 table: "ExpertIndustry",
                 columns: new[] { "Id", "ExpertId", "IndustryId", "Rate" },
-                values: new object[] { new Guid("1ce932ce-cbc2-4bb6-bf5b-221cb2c8d926"), new Guid("6eccd119-f439-4190-af2a-0ae86f1ba775"), new Guid("070bf07f-d429-4041-a4fb-833980bc2784"), 0.0 });
+                values: new object[,]
+                {
+                    { new Guid("05b59c27-38ac-4e05-9038-3d90c30c14e1"), new Guid("51268369-dabf-42c8-b31d-803729eb1666"), new Guid("1f2ccc2d-ae35-483f-a237-fe23f556e6cd"), 0.0 },
+                    { new Guid("48c3bcea-0e12-40ad-ad8d-9ba3f60c1b54"), new Guid("075920b4-da0b-42fc-80ad-3c03ecbfe7d2"), new Guid("a3bb9b9c-883f-43f0-bfc8-27a42bf53cc2"), 0.0 },
+                    { new Guid("74725262-a1eb-4ab8-894f-dbcc04b5ecb3"), new Guid("2099f967-2c60-43c1-a7b1-55eeedb26306"), new Guid("a45131dd-0dce-4a84-8e10-7f6c396a723b"), 0.0 }
+                });
 
             migrationBuilder.InsertData(
                 table: "IndustryCriteria",
                 columns: new[] { "Id", "CriteriaId", "IndustryId", "IndustrySpecificWeight" },
-                values: new object[] { new Guid("ab218829-e291-45ec-bc23-36e0b9bf14d1"), new Guid("6a537539-3c57-4908-b36d-6594c9cb3dd0"), new Guid("070bf07f-d429-4041-a4fb-833980bc2784"), 7.0 });
+                values: new object[,]
+                {
+                    { new Guid("263c1887-c99f-4e5a-820f-49e1cc7c8686"), new Guid("3f406c04-1edb-4ee3-8d50-04f182e27e3f"), new Guid("a45131dd-0dce-4a84-8e10-7f6c396a723b"), 7.0 },
+                    { new Guid("3f1dbda0-99ec-47db-b026-5edbc69fb97c"), new Guid("01f45a5e-fa67-4236-8335-996267b3a5c4"), new Guid("1f2ccc2d-ae35-483f-a237-fe23f556e6cd"), 19.0 },
+                    { new Guid("935055fc-efd0-4e53-9bcf-f1ce1676dafc"), new Guid("79a4fdb6-5753-492c-b209-ccee9978d3a9"), new Guid("a3bb9b9c-883f-43f0-bfc8-27a42bf53cc2"), 3.0 }
+                });
 
             migrationBuilder.InsertData(
                 table: "Project",
                 columns: new[] { "Id", "EnterpriseId", "Name", "StartingInvestmentSum" },
                 values: new object[,]
                 {
-                    { new Guid("2915a0f7-db73-4eb7-9337-636ca5108b87"), new Guid("785cbb0b-5a68-4a80-a184-64672e2a4f64"), "New T-Shirts Collection", 1000.0 },
-                    { new Guid("7868f125-9068-42a9-833e-86e75bf9931a"), new Guid("72627cfc-4faf-49cf-a9d4-0066d2a4fad9"), "New Soccer Club Tournament", 100000000.0 },
-                    { new Guid("e6d96611-5e32-47c7-a878-18fcd71af6f4"), new Guid("0e641783-4755-4d6b-bd29-8f1219a592a4"), "IT Company Hiring Company", 100000.0 }
+                    { new Guid("508f7b09-e707-4301-9d91-4351e3eb3ee5"), new Guid("8171d63b-ab82-4a4f-9157-82e5d36b9ebd"), "T-Shirts Collection", 1000.0 },
+                    { new Guid("9fddd156-7999-40ff-a1f4-a83f4f30f478"), new Guid("aade6a14-a45a-40a9-93a9-9cd1f81fda2c"), "Soccer Club Tournament", 100000000.0 },
+                    { new Guid("c2898f6e-c407-4a9a-9635-65da791c88f7"), new Guid("f797b583-bbe5-4d78-92a9-8730ca274faf"), "IT Company Hiring Company", 100000.0 }
                 });
 
             migrationBuilder.InsertData(
@@ -358,10 +398,14 @@ namespace InvestmentAppServer.Migrations
                 columns: new[] { "Id", "PasswordHash", "UserName", "UserRoleId" },
                 values: new object[,]
                 {
-                    { new Guid("0777899e-aeba-4b8c-a578-c918e8c4e962"), "020FDA3C6F9AA1B774720843FA5E1CF8D24C41C24BE99FCBC50BAB42EADE2C72:07F2DB38E00C991E6EDE4BFD6DED2A5F:50000:SHA256", "SuperAdmin", 1 },
-                    { new Guid("6281aee8-8774-4e33-a616-bb1b06d175c9"), "1FDF083EC56DCB80969048F198F2E6EB5AF57C27268204F4426825A5911DD1C9:B88C83CFA45F673373E19DA810B5367C:50000:SHA256", "Admin", 4 },
-                    { new Guid("6eccd119-f439-4190-af2a-0ae86f1ba775"), "518F612F0FFA27F8182A40AB87F4CDA9BBFA3A843D38088E512258DFA5297873:16A87429F8C22D68E6E1048D2439AEC0:50000:SHA256", "Samson-Alex", 3 },
-                    { new Guid("efcb778c-285f-4844-b184-c697c1b39c07"), "4A3AC69954D82B1156AAD57E83C86B434E33B57AE9DF31F4D25A8A2000AD0FC4:CFE528ADCEB6D77A0BB1CE8F90ECDA1F:50000:SHA256", "Andrews-Fred", 2 }
+                    { new Guid("075920b4-da0b-42fc-80ad-3c03ecbfe7d2"), "518F612F0FFA27F8182A40AB87F4CDA9BBFA3A843D38088E512258DFA5297873:16A87429F8C22D68E6E1048D2439AEC0:50000:SHA256", "Samson-Alex", 3 },
+                    { new Guid("0c26b67f-be4c-4cd6-ad91-786af8ed9460"), "4A3AC69954D82B1156AAD57E83C86B434E33B57AE9DF31F4D25A8A2000AD0FC4:CFE528ADCEB6D77A0BB1CE8F90ECDA1F:50000:SHA256", "Andrews-Fred", 2 },
+                    { new Guid("18ce42df-5f39-4fed-b13a-4a38328898b3"), "1FDF083EC56DCB80969048F198F2E6EB5AF57C27268204F4426825A5911DD1C9:B88C83CFA45F673373E19DA810B5367C:50000:SHA256", "Admin-OFR", 4 },
+                    { new Guid("2099f967-2c60-43c1-a7b1-55eeedb26306"), "518F612F0FFA27F8182A40AB87F4CDA9BBFA3A843D38088E512258DFA5297873:16A87429F8C22D68E6E1048D2439AEC0:50000:SHA256", "Potter-Harry", 3 },
+                    { new Guid("51268369-dabf-42c8-b31d-803729eb1666"), "518F612F0FFA27F8182A40AB87F4CDA9BBFA3A843D38088E512258DFA5297873:16A87429F8C22D68E6E1048D2439AEC0:50000:SHA256", "Philips-Ray", 3 },
+                    { new Guid("710c47be-b1c7-4a57-a684-2407b1f7affd"), "020FDA3C6F9AA1B774720843FA5E1CF8D24C41C24BE99FCBC50BAB42EADE2C72:07F2DB38E00C991E6EDE4BFD6DED2A5F:50000:SHA256", "SuperAdmin", 1 },
+                    { new Guid("9cf3b6cf-6802-4fc8-a6f0-9a4f44477fd0"), "4A3AC69954D82B1156AAD57E83C86B434E33B57AE9DF31F4D25A8A2000AD0FC4:CFE528ADCEB6D77A0BB1CE8F90ECDA1F:50000:SHA256", "Fig-Joe", 2 },
+                    { new Guid("fbd832a5-901e-425d-ab07-982483c854fe"), "4A3AC69954D82B1156AAD57E83C86B434E33B57AE9DF31F4D25A8A2000AD0FC4:CFE528ADCEB6D77A0BB1CE8F90ECDA1F:50000:SHA256", "Pipe-Jenna", 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -369,15 +413,20 @@ namespace InvestmentAppServer.Migrations
                 columns: new[] { "Id", "CashFlowRate", "ExpertId", "PeriodId", "PossibilityId", "ProjectId" },
                 values: new object[,]
                 {
-                    { new Guid("5422b496-0d52-4ef4-8031-02da7eefe63a"), 346.0, new Guid("6eccd119-f439-4190-af2a-0ae86f1ba775"), new Guid("d86b00c7-8029-4db8-a662-fc5e812e2fb1"), new Guid("b150ee68-de97-4b98-b71a-bc8e01dc1a52"), new Guid("7868f125-9068-42a9-833e-86e75bf9931a") },
-                    { new Guid("8ab82f5d-3c47-40c3-803f-6a9b7a6332a0"), 740.0, new Guid("6eccd119-f439-4190-af2a-0ae86f1ba775"), new Guid("d86b00c7-8029-4db8-a662-fc5e812e2fb1"), new Guid("b150ee68-de97-4b98-b71a-bc8e01dc1a52"), new Guid("2915a0f7-db73-4eb7-9337-636ca5108b87") },
-                    { new Guid("9289308b-8cd0-4ec4-8498-f1124ee0fcd2"), 914.0, new Guid("6eccd119-f439-4190-af2a-0ae86f1ba775"), new Guid("d86b00c7-8029-4db8-a662-fc5e812e2fb1"), new Guid("b150ee68-de97-4b98-b71a-bc8e01dc1a52"), new Guid("e6d96611-5e32-47c7-a878-18fcd71af6f4") }
+                    { new Guid("483745d2-7f92-46e5-a6fd-d99d24811c01"), 914.0, new Guid("51268369-dabf-42c8-b31d-803729eb1666"), new Guid("f7a7438e-5532-4363-b672-660447241a0b"), new Guid("ce0cb774-04d6-4f16-b7a2-a3b001afcf79"), new Guid("c2898f6e-c407-4a9a-9635-65da791c88f7") },
+                    { new Guid("5f6b94f9-fcef-4dce-82db-b0925fdd6e24"), 346.0, new Guid("2099f967-2c60-43c1-a7b1-55eeedb26306"), new Guid("eeef44b4-1d94-448d-b048-cfc8e70ea600"), new Guid("0d838c63-b364-466c-86f4-98e26a951f4b"), new Guid("9fddd156-7999-40ff-a1f4-a83f4f30f478") },
+                    { new Guid("8c3acdb4-14fb-4d5e-a171-4469f9bd8102"), 740.0, new Guid("075920b4-da0b-42fc-80ad-3c03ecbfe7d2"), new Guid("5740207b-9feb-468d-9f6f-a318f5cc8548"), new Guid("aa625f05-1b1f-47fa-b105-4de6ec523bff"), new Guid("508f7b09-e707-4301-9d91-4351e3eb3ee5") }
                 });
 
             migrationBuilder.InsertData(
                 table: "InvestorProject",
                 columns: new[] { "Id", "InvestorId", "MaxRiskRate", "MinIncomeRate", "ProjectId" },
-                values: new object[] { new Guid("9447dcb6-bc76-4ced-aa5f-0b5792c1aacf"), new Guid("efcb778c-285f-4844-b184-c697c1b39c07"), 60.0, 30.0, new Guid("2915a0f7-db73-4eb7-9337-636ca5108b87") });
+                values: new object[,]
+                {
+                    { new Guid("05023d13-48a2-4339-a848-7977146bc6a0"), new Guid("fbd832a5-901e-425d-ab07-982483c854fe"), 90.0, 50.0, new Guid("c2898f6e-c407-4a9a-9635-65da791c88f7") },
+                    { new Guid("b5e09f17-f870-408c-9b04-1a0e4298f395"), new Guid("0c26b67f-be4c-4cd6-ad91-786af8ed9460"), 40.0, 10.0, new Guid("508f7b09-e707-4301-9d91-4351e3eb3ee5") },
+                    { new Guid("ecc25fa1-f32f-4c4f-92fd-cf1b0e1832a4"), new Guid("9cf3b6cf-6802-4fc8-a6f0-9a4f44477fd0"), 60.0, 30.0, new Guid("9fddd156-7999-40ff-a1f4-a83f4f30f478") }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Criteria_Name",
@@ -450,8 +499,7 @@ namespace InvestmentAppServer.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_IndustryCriteria_IndustrySpecificWeight",
                 table: "IndustryCriteria",
-                column: "IndustrySpecificWeight",
-                unique: true);
+                column: "IndustrySpecificWeight");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Investor_Name",

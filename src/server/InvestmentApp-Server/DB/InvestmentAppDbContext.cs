@@ -8,7 +8,8 @@ public partial class InvestmentAppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        BuildBaseModels(modelBuilder);
+        BuildProjectModels(modelBuilder);
+        BuildIndustryModels(modelBuilder);
         BuildExpertModel(modelBuilder);
         BuildInvestorModel(modelBuilder);
         BuildAuthenticationModel(modelBuilder);
@@ -18,25 +19,25 @@ public partial class InvestmentAppDbContext : DbContext
 
     private static void InitData(ModelBuilder modelBuilder)
     {
-        var criteria = InitCriteriaData(modelBuilder);
-        var industry = InitIndustryData(modelBuilder);
-        InitIndustryCriteriaData(modelBuilder, industry, criteria);
+        var criterias = InitCriteriaData(modelBuilder);
+        var industries = InitIndustryData(modelBuilder);
+        InitIndustryCriteriaData(modelBuilder, industries, criterias);
 
         var enterprises = InitEnterpriseData(modelBuilder);
         var projects = InitProjectsData(modelBuilder, enterprises);
 
-        var expert = InitExpertsData(modelBuilder);
-        InitExpertIndustryData(modelBuilder, expert, industry);
+        var experts = InitExpertsData(modelBuilder);
+        InitExpertIndustryData(modelBuilder, experts, industries);
 
-        var investor = InitInvestorsData(modelBuilder);
-        InitInvestorProjectData(modelBuilder, investor, projects[0]);
+        var investors = InitInvestorsData(modelBuilder);
+        InitInvestorProjectData(modelBuilder, investors, projects);
 
-        var possibility = InitPossibilityData(modelBuilder);
-        var period = InitPeriodsData(modelBuilder);
-        InitExpertProjectsData(modelBuilder, projects, expert, period, possibility);
+        var possibilities = InitPossibilityData(modelBuilder);
+        var periods = InitPeriodsData(modelBuilder);
+        InitExpertProjectsData(modelBuilder, projects, experts, periods, possibilities);
 
         var roles = InitUserRolesData(modelBuilder);
-        InitUsersData(modelBuilder, expert, investor, roles);
+        InitUsersData(modelBuilder, experts, investors, roles);
     }
 }
 

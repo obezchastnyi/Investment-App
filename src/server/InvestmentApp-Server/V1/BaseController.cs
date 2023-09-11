@@ -19,7 +19,7 @@ public class BaseController : Controller
     }
 
     [NonAction]
-    public bool Authenticate(string userName, string password)
+    protected bool Authenticate(string userName, string password)
     {
         var user = this._context.User
             .AsNoTracking()

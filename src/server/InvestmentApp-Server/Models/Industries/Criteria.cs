@@ -1,13 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace InvestmentApp.Models;
+namespace InvestmentApp.Models.Industries;
 
-public class Possibility
+public class Criteria
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
 
-    public double Rate { get; set; }
+    public string Name { get; set; }
 }
-
