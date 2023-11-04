@@ -59,6 +59,10 @@
       }
     }
 
+    .datatable-row-wrapper:has(.active) {
+      z-index: 10;
+    }
+
     .datatable-body-row {
       background-color: white;
       padding-top: 3px;

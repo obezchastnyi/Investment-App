@@ -35,7 +35,8 @@ public class UserRoleController : BaseController
     {
         if (this._context.UserRole != null)
         {
-            return this.Ok(this._context.UserRole.AsNoTracking());
+            var result = this._context.UserRole.AsNoTracking().ToList();
+            return this.Ok(result);
         }
 
         this._logger.LogError($"{nameof(UserRole)} table is empty.");
@@ -51,7 +52,7 @@ public class UserRoleController : BaseController
         {
             var role = this._context.UserRole
                 .AsNoTracking()
-                .SingleOrDefault(r => r.Id == id);
+                .FirstOrDefault(r => r.Id == id);
 
             if (role != null)
             {

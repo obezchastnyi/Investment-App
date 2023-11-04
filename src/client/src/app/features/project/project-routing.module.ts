@@ -1,11 +1,11 @@
 import { NgModule} from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ProjectTableComponent } from '.';
+import { ProjectComponent } from '.';
 
 const routes: Routes = [
     {
         path: '',
-        component: ProjectTableComponent,
+        component: ProjectComponent,
     },
 ];
 

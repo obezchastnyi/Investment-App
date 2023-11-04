@@ -39,9 +39,11 @@ public class UserController : BaseController
     {
         if (this._context.User != null)
         {
-            return this.Ok(this._context.User
+            var result = this._context.User
                 .Include(e => e.UserRole)
-                .AsNoTracking());
+                .AsNoTracking()
+                .ToList();
+            return this.Ok(result);
         }
 
         this._logger.LogError($"{nameof(InvestmentApp.Models.Authentication.User)} table is empty.");
@@ -57,7 +59,7 @@ public class UserController : BaseController
         {
             var user = this._context.User
                 .AsNoTracking()
-                .SingleOrDefault(u => u.Id == id);
+                .FirstOrDefault(u => u.Id == id);
 
             if (user != null)
             {
@@ -82,7 +84,7 @@ public class UserController : BaseController
             var foundUser = this._context.User
                 .Include(u => u.UserRole)
                 .AsNoTracking()
-                .SingleOrDefault(u => u.UserName == user.UserName);
+                .FirstOrDefault(u => u.UserName == user.UserName);
 
             return this.Ok(foundUser.UserRole?.Code);
         }
@@ -102,7 +104,7 @@ public class UserController : BaseController
             return this.BadRequest();
         }
 
-        var foundUser = this._context.User.SingleOrDefault(u => u.Id == user.Id);
+        var foundUser = this._context.User.FirstOrDefault(u => u.Id == user.Id);
         if (foundUser == null)
         {
             return this.NotFound();
@@ -117,7 +119,7 @@ public class UserController : BaseController
         {
             var role = this._context.UserRole
                 .AsNoTracking()
-                .SingleOrDefault(u => u.Id == user.RoleId);
+                .FirstOrDefault(u => u.Id == user.RoleId);
 
             if (role != null)
             {
@@ -136,14 +138,14 @@ public class UserController : BaseController
     {
         var role = this._context.UserRole
             .AsNoTracking()
-            .SingleOrDefault(u => u.Id == user.RoleId);
+            .FirstOrDefault(u => u.Id == user.RoleId)
+                   ?? this._context.UserRole.First(r => r.Code == UserRoles.Reader.ToString());
 
         this._context.User.Add(new User
         {
             UserName = user.UserName,
             PasswordHash = this._passwordManager.Hash(user.Password),
-            UserRoleId = role?.Id
-                         ?? this._context.UserRole.Single(r => r.Code == UserRoles.Reader.ToString()).Id,
+            UserRoleId = role.Id,
         });
 
         this._context.SaveChanges();

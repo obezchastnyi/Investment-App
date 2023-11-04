@@ -3,18 +3,20 @@ import { Title } from '@angular/platform-browser';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { AuthenticationService, ProjectCacheService } from '../../../../shared/services';
 import { ProjectRow, DataTableColumn } from '../../../../models';
+import { Enterprise } from 'src/app/models/enterprise';
 
 @Component({
-    selector: 'ia-project-table',
-    templateUrl: 'project-table.component.html',
-    styleUrls: ['project-table.component.scss'],
+    selector: 'ia-possibility',
+    templateUrl: 'possibility.component.html',
+    styleUrls: ['possibility.component.scss'],
 })
-export class ProjectTableComponent implements OnInit {
+export class PossibilityComponent implements OnInit {
 
     @ViewChild('inputTemplate', { static: true }) inputTemplate: TemplateRef<unknown>;
     @ViewChild('rowDeleteTemplate', { static: true }) rowDeleteTemplate: TemplateRef<unknown>;
+    @ViewChild('dropdownTemplate', { static: true }) dropdownTemplate: TemplateRef<unknown>;
 
-    tableHeight = window.innerHeight - 180;
+    tableHeight = window.innerHeight - 150;
 
     projectsTableColumnsObs: Observable<DataTableColumn[]>;
     projectsTableRowsObs: Observable<ProjectRow[] | null>;
@@ -23,11 +25,13 @@ export class ProjectTableComponent implements OnInit {
     userName: string;
     role: string;
 
+    enterprisesObs: Observable<Enterprise[] | null>;
+
     constructor(private titleService: Title,
-                private dataService: ProjectCacheService,
-                private authService: AuthenticationService
+        private dataService: ProjectCacheService,
+        private authService: AuthenticationService
     ) {
-        this.titleService.setTitle('Project - Investments');
+        this.titleService.setTitle('Possibility - Investments');
 
         this.userName = this.authService.userName;
         this.role = this.authService.role;
@@ -62,13 +66,24 @@ export class ProjectTableComponent implements OnInit {
                 flexGrow: 1,
                 draggable: false,
             },
+            {
+                prop: 'enterprise',
+                name: 'Enterprise',
+                innerTemplate: this.dropdownTemplate,
+                sortable: true,
+                width: 300,
+                flexGrow: 1,
+                draggable: false,
+            },
         ];
         this.projectsTableColumnsObs = new BehaviorSubject<DataTableColumn[]>(PROJECT_TABLE_COLUMNS).asObservable();
         this.projectsTableRowsObs = this.dataService.getTableRows();
+
+        this.enterprisesObs = this.dataService.getEnterprises();
     }
 
     onInputChange(row: ProjectRow, value: any, column: string) {
-        let changedRow = {...row};
+        let changedRow = { ...row };
         if (this.updatedProjects.indexOf(changedRow) === -1) {
             this.updatedProjects.push(changedRow)
         }
@@ -77,7 +92,7 @@ export class ProjectTableComponent implements OnInit {
     }
 
     onRowUpdate(row: ProjectRow, value: any, column: string) {
-        let updatedRow = {...row};
+        let updatedRow = { ...row };
         updatedRow[column] = value;
         this.dataService.updateTableRow(updatedRow);
     }
@@ -102,5 +117,8 @@ export class ProjectTableComponent implements OnInit {
         this.dataService.confirmAllUpdates(this.updatedProjects);
     }
 
-    protected readonly window = window;
+    onEnterpriseChange(row: ProjectRow, enterprise: string) {
+        row.enterprise = enterprise;
+        this.dataService.updateTableRow(row);
+    }
 }

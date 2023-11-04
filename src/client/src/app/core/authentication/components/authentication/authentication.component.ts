@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { faCoffee, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { AuthenticationService } from 'src/app/shared/services';
 
 @Component({
@@ -6,6 +7,11 @@ import { AuthenticationService } from 'src/app/shared/services';
     styleUrls: ['./authentication.component.scss'],
 })
 export class AuthenticationComponent {
+
+    showPassword = false;
+    faEye = faEye;
+    faEyeSlash = faEyeSlash;
+    
     isAuthenticated: boolean;
 
     userName = '';
@@ -44,5 +50,17 @@ export class AuthenticationComponent {
         }
 
         return valid;
+    }
+
+    onShowPassword() {
+        let input = document.getElementById("inputPassword");
+
+        if (input.getAttribute('type') === "password") {
+            input.setAttribute('type', 'text');
+            this.showPassword = true;
+        } else {
+            input.setAttribute('type', 'password');
+            this.showPassword = false;
+        }
     }
 }

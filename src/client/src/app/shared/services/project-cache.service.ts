@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, shareReplay } from 'rxjs';
 import { Project, ProjectRow } from 'src/app/models';
 import { APP_SETTINGS } from '../utils';
+import { Enterprise } from 'src/app/models/enterprise';
 
 @Injectable({
     providedIn: 'root',
@@ -12,6 +13,7 @@ export class ProjectCacheService {
     serverUrl = `${APP_SETTINGS.SERVER_BASE_URL}${APP_SETTINGS.SERVER_CURRENT_VERSION}`;
 
     private loadedProjectsSub = new BehaviorSubject<ProjectRow[] | null>(null);
+    private loadedEnterprisesSub = new BehaviorSubject<Enterprise[] | null>(null);
 
     constructor(private http: HttpClient) {
         this.loadDataFromApi();
@@ -19,6 +21,12 @@ export class ProjectCacheService {
 
     getTableRows(): Observable<ProjectRow[]> {
         return this.loadedProjectsSub.asObservable().pipe(
+            shareReplay(1),
+        );
+    }
+
+    getEnterprises(): Observable<Enterprise[]> {
+        return this.loadedEnterprisesSub.asObservable().pipe(
             shareReplay(1),
         );
     }
@@ -31,7 +39,8 @@ export class ProjectCacheService {
         this.addNewDataToApi({
             id: '',
             name: `New Item ${this.loadedProjectsSub.value.length + 1}`,
-            startingInvestmentSum: 0
+            startingInvestmentSum: 0,
+            enterprise: this.loadedEnterprisesSub.getValue()[0].name,
         });
     }
 
@@ -41,6 +50,7 @@ export class ProjectCacheService {
 
         row.startingInvestmentSum = project.startingInvestmentSum;
         row.name = project.name;
+        row.enterprise = project.enterprise;
 
         this.updateDataByApi(project);
     }
@@ -58,30 +68,41 @@ export class ProjectCacheService {
             id: project.id,
             name: project.name,
             startingInvestmentSum: project.startingInvestmentSum,
-        }).subscribe(()  => {},
-        err => {
-            alert('[updateDataByApi] failed');
-        });
+            enterpriseId: this.loadedEnterprisesSub.value.find(e => e.name === project.enterprise).id,
+        }).subscribe(() => { },
+            err => {
+                alert('[updateDataByApi] failed');
+            });
     }
 
     private updateCollectionOfDataByApi(projects: ProjectRow[]): void {
-        this.http.put(`${this.serverUrl}project/all-update`, projects)
-            .subscribe(()  => {
+        let body: any[] = [];
+        projects.forEach(p => {
+            body.push({
+                id: p.id,
+                name: p.name,
+                startingInvestmentSum: p.startingInvestmentSum,
+                enterpriseId: this.loadedEnterprisesSub.value.find(e => e.name === p.enterprise).id,
+            })
+        })
+
+        this.http.put(`${this.serverUrl}project/all-update`, body)
+            .subscribe(() => {
                 this.loadDataFromApi();
             },
-            err => {
-                alert('Failed update');
-            });
+                err => {
+                    alert('Failed update');
+                });
     }
 
     private deleteRow(id: string): void {
         this.http.delete(`${this.serverUrl}project/${id}`)
-            .subscribe(()  => {
+            .subscribe(() => {
                 this.loadDataFromApi();
             },
-            err => {
-                alert('[deleteRow] failed');
-            });
+                err => {
+                    alert('[deleteRow] failed');
+                });
     }
 
     private addNewDataToApi(project: ProjectRow) {
@@ -94,27 +115,31 @@ export class ProjectCacheService {
             id: project.id,
             name: project.name,
             startingInvestmentSum: project.startingInvestmentSum,
-        }).subscribe(()  => {
+        }).subscribe(() => {
             this.loadDataFromApi();
         },
-        err => {
-            alert('[addNewDataToApi] failed');
-        });
+            err => {
+                alert('[addNewDataToApi] failed');
+            });
     }
 
     private getDataFromApi(): void {
         combineLatest([
-            this.http.get(`${this.serverUrl}project/all`) as Observable<Project[]>
-        ]).subscribe(([projects]) => {
+            this.http.get(`${this.serverUrl}project/all`) as Observable<Project[]>,
+            this.http.get(`${this.serverUrl}enterprise/all`) as Observable<Enterprise[]>
+        ]).subscribe(([projects, enterprises]) => {
             let data: ProjectRow[] = projects.map(p => ({
                 id: p.id.toString(),
                 name: p.name,
                 startingInvestmentSum: p.startingInvestmentSum,
+                enterprise: p.enterprise.name,
             }));
+
             this.loadedProjectsSub.next(data);
+            this.loadedEnterprisesSub.next(enterprises);
         },
-        err => {
-            alert('[getDataFromApi] failed');
-        });
+            err => {
+                alert('[getDataFromApi] failed');
+            });
     }
 }

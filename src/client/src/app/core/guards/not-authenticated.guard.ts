@@ -5,9 +5,9 @@ import { AuthenticationService } from 'src/app/shared/services';
 @Injectable({
     providedIn: 'root',
 })
-export class NotAuthenticatedGuard  {
+export class NotAuthenticatedGuard {
 
-    constructor(private router: Router, private authService: AuthenticationService){ }
+    constructor(private router: Router, private authService: AuthenticationService) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
         return this.authService.isAuthenticated()

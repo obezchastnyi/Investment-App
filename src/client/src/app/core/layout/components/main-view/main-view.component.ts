@@ -1,4 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { BehaviorSubject, Observable, of } from "rxjs";
 import { ActionRow, DataTableColumn } from 'src/app/models';
 import { AuthenticationService } from 'src/app/shared/services';
@@ -9,6 +10,8 @@ import { AuthenticationService } from 'src/app/shared/services';
     styleUrls: ['./main-view.component.scss'],
 })
 export class MainViewComponent implements OnInit {
+
+    faDownload = faDownload;
 
     actionsTableColumnsObs: Observable<DataTableColumn[]>;
     actionsTableRowsObs: Observable<ActionRow[] | null>;

@@ -1,0 +1,65 @@
+<div class="page-view">
+  <div class="row justify-content-center mb-3 mr-1 ml-1">
+    <div class="mr-3">
+      <button type="button" class="btn btn-primary" [disabled]="role != 'Admin' && role != 'Creator'"
+        (click)="addNewRow()">Add Project</button>
+    </div>
+
+    <div class="ml-3">
+      <button type="button" class="btn btn-success" [disabled]="role != 'Admin' && role != 'Writer'"
+        (click)="confirmAllUpdates()">Confirm All Updates</button>
+    </div>
+
+    <div class="ml-3">
+      <button type="button" class="btn btn-warning" [disabled]="role != 'Admin' && role != 'Writer'"
+        (click)="discardAllChanges()">Discard All Updates</button>
+    </div>
+  </div>
+
+  <div class="flex-column ml-1 mr-1">
+    <ia-data-table [columnsObs]="projectsTableColumnsObs" [rowsObs]="projectsTableRowsObs" [allowScroll]="true"
+      [headerHeight]="50" [rowHeight]="70" [tableHeight]="tableHeight" [footerHeight]="50">
+    </ia-data-table>
+  </div>
+
+  <ng-template #inputTemplate let-row="row" let-value="value" let-column="column">
+    <div class="input-group mr-3">
+      <input #inpt type="text" class="form-control" placeholder="{{column.name}}" [value]="value"
+        [ngClass]="{ 'is-invalid': inpt.value == '' }" [disabled]="role != 'Admin' && role != 'Writer'"
+        (change)="onInputChange(row, $event.target['value'], column.prop)">
+
+      <div class="invalid-feedback">{{ column.name }} is Empty</div>
+
+      <div class="input-group-append" *ngIf="inpt.value != value && inpt.value != ''">
+        <button type="button" class="btn btn-warning" (click)="inpt.value = value">
+          <img src="/assets/discard.png" width="25" height="25" class="" alt="">
+        </button>
+
+        <button type="button" class="btn btn-info" (click)="onRowUpdate(row, inpt.value, column.prop)">
+          <img src="/assets/save.png" width="25" height="25">
+        </button>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #rowDeleteTemplate let-row="row" let-value="value" let-column="column">
+    <button type="button" class="btn btn-danger" [disabled]="role != 'Admin' && role != 'Creator'"
+      (click)="onRowDelete(row)">
+      <img src="/assets/delete.png" width="25" height="25">
+    </button>
+  </ng-template>
+
+  <ng-template #dropdownTemplate let-row="row" let-value="value" let-column="column">
+    <div class="dropdown">
+      <button [disabled]="role != 'Admin' && role != 'Writer'" class="btn btn-info dropdown-toggle" type="button"
+        id="dropdownMenuButton" data-toggle="dropdown">
+        {{ value }}
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <button class="dropdown-item" *ngFor="let enterprise of enterprisesObs | async;"
+          (click)="onEnterpriseChange(row, enterprise.name)">{{
+          enterprise.name }}</button>
+      </div>
+    </div>
+  </ng-template>
+</div>

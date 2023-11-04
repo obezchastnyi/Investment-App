@@ -1,26 +1,106 @@
-<div class="profile container mb-4 p-3 d-flex justify-content-center">
-  <div class="card p-4">
-    <div class="image d-flex flex-column justify-content-center align-items-center">
-      <button class="btn btn-secondary" [ngSwitch]="role">
-        <img src="/assets/admin.png" height="70" width="70" *ngSwitchCase="'Admin'"/>
-        <img src="/assets/reader.png" height="70" width="70" *ngSwitchCase="'Reader'"/>
-        <img src="/assets/writer.png" height="70" width="70" *ngSwitchCase="'Writer'"/>
-        <img src="/assets/creator.png" height="70" width="70" *ngSwitchCase="'Creator'"/>
-      </button>
+<div id="wrapper" class="toggled">
+  <div id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+      <li class="sidebar-brand" style="color: white; font-weight: bold;"> DATA VIEW && EDIT </li>
+      <hr class="separate">
 
-      <div class="row">
-        <h5 class="px-3 rounded username mt-3 mr-3">{{ userName }}</h5>
-        <h5 class="px-3 rounded role mt-3 ml-3">{{ role }}</h5>
+      <div class="btn-group">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false" style="margin-left: 10px;">
+          Project
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" routerLink="/project">Projects</a>
+          <a class="dropdown-item" routerLink="/expert-project">Expert Projects</a>
+          <a class="dropdown-item" routerLink="/investor-project">Investor Projects</a>
+        </div>
       </div>
+      <br /><br />
 
-      <ia-data-table class="mt-3" [columnsObs]="actionsTableColumnsObs" [rowsObs]="actionsTableRowsObs"
-                     [allowScroll]="true" [headerHeight]="50" [rowHeight]="70" [tableHeight]="340">
-      </ia-data-table>
+      <li> <a routerLink="/period">Period</a> </li>
+      <li> <a routerLink="/possibility">Possibility</a> </li>
+      <hr class="separate">
+
+      <div class="btn-group">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false" style="margin-left: 10px;">
+          Industry
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+          <a class="dropdown-item" routerLink="/industry">Industry</a>
+          <a class="dropdown-item" routerLink="/expert-industry">Expert Industry</a>
+        </div>
+      </div>
+      <br /><br />
+
+      <div class="btn-group">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton3" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false" style="margin-left: 10px;">
+          Criteria
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+          <a class="dropdown-item" routerLink="/criteria">Criterias</a>
+          <a class="dropdown-item" routerLink="/industry-criteria">Industry Criteria</a>
+        </div>
+      </div>
+      <hr class="separate">
+
+      <li> <a routerLink="/enterprise">Enterprises</a> </li>
+      <hr class="separate">
+
+      <div class="btn-group">
+        <a routerLink="/users">
+          <button class="btn btn-secondary" type="button" style="margin-left: 10px;"
+            [ngClass]="{ 'd-none': role != 'Admin' }">
+            User Settings
+          </button>
+        </a>
+      </div>
+    </ul>
+  </div>
+
+  <div id="page-content-wrapper">
+    <div class="container-fluid">
+      <h1 style="text-align: center;">INVESTMENT PORTFOLIO FORMATION</h1>
+      <img class="center" src="/assets/investment-banner.jpeg" width="300" height="300" alt="">
+      <br />
+
+      <a href="assets/diploma-desc.pdf">
+        <button class="download-btn" style="width:100%">
+          <fa-icon [icon]="faDownload"></fa-icon> Diploma Project Work Description
+        </button>
+      </a>
+      <br /><br />
+
+      <p style="text-align: center;">
+        The basis of successful management is a logically connected set of development strategies
+        enterprise, investment goals, goals of the main activity and financial policy, where all these elements
+        reinforce each other, not conflict.
+        Investment activity to one degree or another is characteristic of any enterprise. She is one of
+        the most important aspects of the functioning of any commercial organization.
+        The investment management strategy of the enterprise is a part of the general strategy of the enterprise, which
+        consists in
+        choosing the most effective ways of expanding the volume of assets to ensure the main directions of its
+        development
+        [1].
+        Investment policy serves as the initial base of investment activity. It defines medium-term and
+        long-term goals of investment activities and the main ways to achieve them.
+        Today, the state of production, conditions and level of technical equipment depend on the effectiveness of the
+        investment policy
+        equipment of the fixed assets of enterprises of the national economy, the possibility of structural
+        restructuring of the economy,
+        solutions to social and environmental problems. Investments are the basis for the development of enterprises,
+        individual industries and
+        economy as a whole [2-3].
+        To develop and implement an enterprise's investment policy, it is necessary to take into account many factors:
+        risk,
+        efficiency, profitability of projects. In the framework of the development of the investment policy, it is
+        necessary to take managerial decisions
+        decisions related to the choice of the company's strategy, the formation of a portfolio of projects.
+        This paper examines the issues of forming an investment portfolio within the framework of the developed
+        investment plan
+        company policy.
+      </p>
     </div>
   </div>
 </div>
-
-<ng-template #checkTemplate let-row="row" let-value="value">
-  <img *ngIf="value > 0" src="/assets/check.png" height="50" width="50"/>
-  <img *ngIf="value === 0" src="/assets/no_check.png" height="50" width="50"/>
-</ng-template>

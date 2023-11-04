@@ -7,29 +7,38 @@
   <div class="header-nav-bar row" *ngIf="isAuthenticated">
     <div class="header-nav col-xs-6">
       <ul class="nav">
-        <li class="nav-item mr-3">
-          <a class="nav-link badge badge-info" routerLink="/project"><h4 class="">Projects [+Period +Possibility]</h4></a>
+        <li class="nav-item mr-3" [ngClass]="{ 'd-none': role != 'Admin' && role != 'Creator' }">
+          <a class="nav-link badge badge-info" routerLink="/calculation"><h4 class="">Calculation</h4></a>
         </li>
-        <li class="nav-item mr-3">
-          <a class="nav-link badge badge-info" routerLink="/criteria"><h4 class="">Criterias</h4></a>
+        <li class="nav-item mr-3" [ngClass]="{ 'd-none': role != 'Admin' && role != 'Creator' }">
+          <a class="nav-link badge badge-info" routerLink="/forecasting"><h4 class="">Forecasting</h4></a>
         </li>
-        <li class="nav-item mr-3">
-          <a class="nav-link badge badge-info" routerLink="/industry"><h4 class="">Industry [+ExpertIndustry +IndustryCriteria]</h4></a>
+        <li class="nav-item mr-3" [ngClass]="{ 'd-none': role != 'Admin' && role != 'Creator' }">
+          <a class="nav-link badge badge-info" routerLink="/assessment"><h4 class="">Assessment</h4></a>
         </li>
-        <li class="nav-item mr-3">
-          <a class="nav-link badge badge-info" routerLink="/enterprise"><h4 class="">Enterprises</h4></a>
+        <li class="nav-item mr-3" [ngClass]="{ 'd-none': role != 'Admin' && role != 'Writer' }">
+          <a class="nav-link badge badge-info" routerLink="/evaluation"><h4 class="">Evaluation</h4></a>
         </li>
-        <li class="nav-item ml-3">
+        <li class="nav-item mr-3" [ngClass]="{ 'd-none': role != 'Admin' && role != 'Reader' }">
+          <a class="nav-link badge badge-info" routerLink="/formation"><h4 class="">Formation</h4></a>
+        </li>
+        <!-- <li class="nav-item ml-3">
           <a class="nav-link badge badge-info" routerLink="/users"
              [ngClass]="{ 'disabled': role != 'Admin' }"><h4 class="">Users</h4></a>
-        </li>
+        </li> -->
       </ul>
     </div>
 
     <div class="col-xs-6">
       <form class="form-inline">
-        <span class="username badge badge-primary"><h6>{{ userName }}</h6></span>
-        <span class="password badge badge-info"><h6>{{ role }}</h6></span>
+        <a routerLink="/user-page">
+          <span class="username badge badge-primary">
+            <h6>{{ userName }}</h6>
+          </span>
+          <span class="password badge badge-info">
+            <h6>{{ role }}</h6>
+          </span>
+        </a>
 
         <button class="logout-btn btn btn-outline-danger" type="button" (click)="logout()">Logout</button>
       </form>

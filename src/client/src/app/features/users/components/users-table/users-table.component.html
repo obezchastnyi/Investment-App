@@ -1,23 +1,13 @@
 <div class="flex-column">
-  <ia-data-table [columnsObs]="usersTableColumnsObs" [rowsObs]="usersTableRowsObs"
-                 [allowScroll]="true" [headerHeight]="50" [rowHeight]="70" [footerHeight]="50" [tableHeight]="tableHeight">
+  <ia-data-table [columnsObs]="usersTableColumnsObs" [rowsObs]="usersTableRowsObs" [allowScroll]="true"
+    [headerHeight]="50" [rowHeight]="70" [footerHeight]="50" [tableHeight]="tableHeight">
   </ia-data-table>
-</div>
-
-<div class="flex-column">
-  <h1>TODO: EXPERTS</h1>
-</div>
-
-<div class="flex-column">
-  <h1>TODO: INVESTORS</h1>
 </div>
 
 <ng-template #inputTemplate let-row="row" let-value="value" let-column="column">
   <div class="input-group mr-3">
-    <input #inpt type="text" class="form-control" placeholder="{{column.name}}"
-           [value]="value"
-           [ngClass]="{ 'is-invalid': inpt.value == '' }"
-           (change)="onInputChange(row, $event.target['value'], column.prop)">
+    <input #inpt type="text" class="form-control" placeholder="{{column.name}}" [value]="value"
+      [ngClass]="{ 'is-invalid': inpt.value == '' }" (change)="onInputChange(row, $event.target['value'], column.prop)">
 
     <div class="invalid-feedback">{{ column.name }} is Empty</div>
 
@@ -39,8 +29,25 @@
       {{ value }}
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <button class="dropdown-item" *ngFor="let role of rolesObs | async;"
-          (click)="onRoleChange(row, role.code)">{{ role.code }}</button>
+      <button class="dropdown-item" *ngFor="let role of rolesObs | async;" (click)="onRoleChange(row, role.code)">{{
+        role.code }}</button>
     </div>
+  </div>
+</ng-template>
+
+<ng-template #accessTemplate let-row="row" let-value="value" let-column="column">
+  <div [ngSwitch]="value">
+    <span class="badge badge-success" *ngSwitchCase="'Reader'">
+      <h6>investor (OPR)</h6>
+    </span>
+    <span class="password badge badge-warning" *ngSwitchCase="'Writer'">
+      <h6>expert</h6>
+    </span>
+    <span class="password badge badge-primary" *ngSwitchCase="'Creator'">
+      <h6>admin (OFR)</h6>
+    </span>
+    <span class="password badge badge-danger" *ngSwitchCase="'Admin'">
+      <h6>super admin</h6>
+    </span>
   </div>
 </ng-template>

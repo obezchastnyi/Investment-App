@@ -36,9 +36,11 @@ public class ProjectController : BaseController
     {
         if (this._context.Project != null)
         {
-            return this.Ok(this._context.Project
+            var result = this._context.Project
                 .Include(e => e.Enterprise)
-                .AsNoTracking());
+                .AsNoTracking()
+                .ToList();
+            return this.Ok(result);
         }
 
         this._logger.LogError($"{nameof(Project)} table is empty.");
@@ -54,7 +56,7 @@ public class ProjectController : BaseController
         {
             var project = this._context.Project
                 .AsNoTracking()
-                .SingleOrDefault(p => p.Id == id);
+                .FirstOrDefault(p => p.Id == id);
 
             if (project != null)
             {
@@ -74,10 +76,16 @@ public class ProjectController : BaseController
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
     public IActionResult CreateProject([FromBody] ProjectDto project)
     {
+        var enterprise = this._context.Enterprise
+            .AsNoTracking()
+            .FirstOrDefault(e => e.Id == project.EnterpriseId)
+            ?? this._context.Enterprise.AsNoTracking().First();
+
         this._context.Project.Add(new Project
         {
             Name = project.Name,
             StartingInvestmentSum = project.StartingInvestmentSum,
+            EnterpriseId = enterprise.Id,
         });
 
         this._context.SaveChanges();
@@ -95,7 +103,7 @@ public class ProjectController : BaseController
             return this.BadRequest();
         }
 
-        var foundProject = this._context.Project.SingleOrDefault(p => p.Id == project.Id);
+        var foundProject = this._context.Project.FirstOrDefault(p => p.Id == project.Id);
         if (foundProject == null)
         {
             return this.NotFound();
@@ -111,6 +119,18 @@ public class ProjectController : BaseController
             foundProject.StartingInvestmentSum = project.StartingInvestmentSum;
         }
 
+        if (project.EnterpriseId != default)
+        {
+            var enterprise = this._context.Enterprise
+                .AsNoTracking()
+                .FirstOrDefault(e => e.Id == project.EnterpriseId);
+
+            if (enterprise != null)
+            {
+                foundProject.EnterpriseId = enterprise.Id;
+            }
+        }
+
         this._context.SaveChanges();
         return this.Ok();
     }
@@ -121,7 +141,7 @@ public class ProjectController : BaseController
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
     public IActionResult UpdateProjects([FromBody] IEnumerable<Project> projects)
     {
-        var results = projects.Select(this.UpdateProject).ToList();
+        var results = projects.Select(this.UpdateProject);
 
         if (results.SingleOrDefault(r => r.GetType() == typeof(BadRequestResult)) != null)
         {
@@ -143,7 +163,7 @@ public class ProjectController : BaseController
     {
         if (this._context.Project != null)
         {
-            var project = this._context.Project.SingleOrDefault(p => p.Id == id);
+            var project = this._context.Project.FirstOrDefault(p => p.Id == id);
             if (project != null)
             {
                 this._context.Project.Remove(project);

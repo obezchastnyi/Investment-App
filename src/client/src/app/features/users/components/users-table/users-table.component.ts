@@ -13,8 +13,9 @@ export class UsersTableComponent implements OnInit {
 
     @ViewChild('dropdownTemplate', { static: true }) dropdownTemplate: TemplateRef<unknown>;
     @ViewChild('inputTemplate', { static: true }) inputTemplate: TemplateRef<unknown>;
+    @ViewChild('accessTemplate', { static: true }) accessTemplate: TemplateRef<unknown>;
 
-    tableHeight = window.innerHeight - 130;
+    tableHeight = window.innerHeight - 80;
 
     usersTableColumnsObs: Observable<DataTableColumn[]>;
     usersTableRowsObs: Observable<UserRow[] | null>;
@@ -44,6 +45,15 @@ export class UsersTableComponent implements OnInit {
                 prop: 'role',
                 name: 'Role',
                 innerTemplate: this.dropdownTemplate,
+                sortable: true,
+                width: 300,
+                flexGrow: 1,
+                draggable: false,
+            },
+            {
+                prop: 'role',
+                name: 'Role',
+                innerTemplate: this.accessTemplate,
                 sortable: true,
                 width: 300,
                 flexGrow: 1,

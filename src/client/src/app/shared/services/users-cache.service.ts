@@ -48,8 +48,8 @@ export class UsersCacheService {
         this.http.put(`${this.serverUrl}user`, {
             id: user.id,
             userName: user.userName,
-            userRoleId: this.loadedRolesSub.value.find(r => r.code === user.role)?.id,
-        }).subscribe(()  => {},
+            roleId: this.loadedRolesSub.value.find(r => r.code === user.role).id,
+        }).subscribe(() => { },
             err => {
                 alert('[updateDataByApi] failed');
             });

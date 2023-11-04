@@ -7,15 +7,18 @@ import { AppRoutingModule } from '../app-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { AuthorizationInterceptor } from './interceptors';
 import { AuthenticationComponent } from './authentication';
-import { HeaderComponent, MainViewComponent } from './layout';
+import { HeaderComponent, MainViewComponent, UserPageComponent } from './layout';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
     declarations: [
+        UserPageComponent,
         MainViewComponent,
         HeaderComponent,
         AuthenticationComponent,
     ],
     imports: [
+        FontAwesomeModule,
         RouterModule,
         AppRoutingModule,
         BrowserModule,
@@ -31,6 +34,7 @@ import { HeaderComponent, MainViewComponent } from './layout';
         },
     ],
     exports: [
+        UserPageComponent,
         MainViewComponent,
         HeaderComponent,
         AuthenticationComponent,
