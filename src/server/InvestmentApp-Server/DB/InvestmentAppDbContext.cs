@@ -4,7 +4,8 @@ namespace InvestmentApp.DB;
 
 public partial class InvestmentAppDbContext : DbContext
 {
-    public InvestmentAppDbContext(DbContextOptions<InvestmentAppDbContext> options) : base(options) { }
+    public InvestmentAppDbContext(DbContextOptions<InvestmentAppDbContext> options)
+        : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

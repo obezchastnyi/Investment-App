@@ -5,7 +5,7 @@ using InvestmentApp.Attributes;
 using InvestmentApp.DB;
 using InvestmentApp.Interfaces;
 using InvestmentApp.Models.Investors;
-using InvestmentApp.V1.DTOs.Projects;
+using InvestmentApp.V1.DTOs.Investors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -52,7 +52,7 @@ public class InvestorController : BaseController
         {
             var investor = this._context.Investor
                 .AsNoTracking()
-                .SingleOrDefault(p => p.Id == id);
+                .FirstOrDefault(p => p.Id == id);
 
             if (investor != null)
             {
@@ -93,7 +93,7 @@ public class InvestorController : BaseController
             return this.BadRequest();
         }
 
-        var foundInvestor = this._context.Investor.SingleOrDefault(p => p.Id == investor.Id);
+        var foundInvestor = this._context.Investor.FirstOrDefault(p => p.Id == investor.Id);
         if (foundInvestor == null)
         {
             return this.NotFound();
@@ -121,12 +121,12 @@ public class InvestorController : BaseController
     {
         var results = investors.Select(this.UpdateInvestor).ToList();
 
-        if (results.SingleOrDefault(r => r.GetType() == typeof(BadRequestResult)) != null)
+        if (results.FirstOrDefault(r => r.GetType() == typeof(BadRequestResult)) != null)
         {
             return this.BadRequest();
         }
 
-        if (results.SingleOrDefault(r => r.GetType() == typeof(NotFoundResult)) != null)
+        if (results.FirstOrDefault(r => r.GetType() == typeof(NotFoundResult)) != null)
         {
             return this.BadRequest();
         }
@@ -141,7 +141,7 @@ public class InvestorController : BaseController
     {
         if (this._context.Investor != null)
         {
-            var investor = this._context.Investor.SingleOrDefault(p => p.Id == id);
+            var investor = this._context.Investor.FirstOrDefault(p => p.Id == id);
             if (investor != null)
             {
                 this._context.Investor.Remove(investor);

@@ -143,12 +143,12 @@ public class ProjectController : BaseController
     {
         var results = projects.Select(this.UpdateProject);
 
-        if (results.SingleOrDefault(r => r.GetType() == typeof(BadRequestResult)) != null)
+        if (results.FirstOrDefault(r => r.GetType() == typeof(BadRequestResult)) != null)
         {
             return this.BadRequest();
         }
 
-        if (results.SingleOrDefault(r => r.GetType() == typeof(NotFoundResult)) != null)
+        if (results.FirstOrDefault(r => r.GetType() == typeof(NotFoundResult)) != null)
         {
             return this.BadRequest();
         }

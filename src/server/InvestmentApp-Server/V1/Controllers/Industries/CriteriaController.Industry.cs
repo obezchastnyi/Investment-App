@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using InvestmentApp.Attributes;
-using InvestmentApp.DB;
-using InvestmentApp.Interfaces;
 using InvestmentApp.Models.Industries;
 using InvestmentApp.V1.DTOs.Industries;
 using Microsoft.AspNetCore.Http;
@@ -13,44 +10,35 @@ using Microsoft.Extensions.Logging;
 
 namespace InvestmentApp.V1.Controllers.Industries;
 
-[V1]
-[Route("v{version:apiVersion}/criteria")]
-[ApiController]
-public partial class CriteriaController : BaseController
+public partial class CriteriaController
 {
-    private readonly InvestmentAppDbContext _context;
-    private readonly ILogger<CriteriaController> _logger;
-
-    public CriteriaController(
-        ILogger<CriteriaController> logger, InvestmentAppDbContext context, IPasswordManager passwordManager)
-        : base(context, passwordManager)
-    {
-        this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this._context = context ?? throw new ArgumentNullException(nameof(context));
-    }
-
-    [HttpGet("all")]
-    [ProducesResponseType(typeof(IEnumerable<Criteria>), StatusCodes.Status200OK)]
+    [HttpGet("all/industry")]
+    [ProducesResponseType(typeof(IEnumerable<IndustryCriteria>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
-    public IActionResult GetAllCriterias()
+    public IActionResult GetAllIndustryCriterias()
     {
-        if (this._context.Criteria != null)
+        if (this._context.IndustryCriteria != null)
         {
-            return this.Ok(this._context.Criteria.AsNoTracking());
+            return this.Ok(this._context.IndustryCriteria
+                .Include(c => c.Criteria)
+                .Include(c => c.Industry)
+                .AsNoTracking());
         }
 
-        this._logger.LogError($"{nameof(Criteria)} table is empty.");
+        this._logger.LogError($"{nameof(IndustryCriteria)} table is empty.");
         return this.NotFound();
     }
 
-    [HttpGet("{id:guid}")]
-    [ProducesResponseType(typeof(Criteria), StatusCodes.Status200OK)]
+    [HttpGet("industry/{id:guid}")]
+    [ProducesResponseType(typeof(IndustryCriteria), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
-    public IActionResult GetCriteria(Guid id)
+    public IActionResult GetIndustryCriteria(Guid id)
     {
-        if (this._context.Criteria != null)
+        if (this._context.IndustryCriteria != null)
         {
-            var criteria = this._context.Criteria
+            var criteria = this._context.IndustryCriteria
+                .Include(c => c.Criteria)
+                .Include(c => c.Industry)
                 .AsNoTracking()
                 .FirstOrDefault(p => p.Id == id);
 
@@ -67,49 +55,64 @@ public partial class CriteriaController : BaseController
         return this.NotFound();
     }
 
-    [HttpPost("")]
+    [HttpPost("industry")]
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
-    public IActionResult CreateCriteria([FromBody] CriteriaDto criteria)
+    public IActionResult CreateIndustryCriteria([FromBody] IndustryCriteriaDto criteria)
     {
-        this._context.Criteria.Add(new Criteria { Name = criteria.Name });
+        this._context.IndustryCriteria.Add(new IndustryCriteria
+        {
+            IndustryId = criteria.IndustryId,
+            CriteriaId = criteria.CriteriaId,
+            IndustrySpecificWeight = criteria.IndustrySpecificWeight
+        });
         this._context.SaveChanges();
         return this.Ok();
     }
 
-    [HttpPut("")]
+    [HttpPut("industry")]
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
-    public IActionResult UpdateCriteria([FromBody] Criteria criteria)
+    public IActionResult UpdateIndustryCriteria([FromBody] IndustryCriteria criteria)
     {
         if (criteria.Id == default)
         {
             return this.BadRequest();
         }
 
-        var foundCriteria = this._context.Criteria.FirstOrDefault(p => p.Id == criteria.Id);
+        var foundCriteria = this._context.IndustryCriteria.FirstOrDefault(p => p.Id == criteria.Id);
         if (foundCriteria == null)
         {
             return this.NotFound();
         }
 
-        if (!string.IsNullOrEmpty(criteria.Name))
+        if (criteria.IndustryId != default)
         {
-            foundCriteria.Name = criteria.Name;
+            foundCriteria.IndustryId = criteria.IndustryId;
+        }
+
+        if (criteria.CriteriaId != default)
+        {
+            foundCriteria.CriteriaId = criteria.CriteriaId;
+        }
+
+        if (criteria.IndustrySpecificWeight != default)
+        {
+            foundCriteria.IndustrySpecificWeight = criteria.IndustrySpecificWeight;
         }
 
         this._context.SaveChanges();
         return this.Ok();
     }
 
-    [HttpPut("all-update")]
+    [HttpPut("all-update/industry")]
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
-    public IActionResult UpdateCriterias([FromBody] IEnumerable<Criteria> criterias)
+    public IActionResult UpdateIndustryCriterias([FromBody] IEnumerable<IndustryCriteria> criterias)
     {
-        var results = criterias.Select(this.UpdateCriteria).ToList();
+        var results = criterias.Select(this.UpdateIndustryCriteria).ToList();
 
         if (results.FirstOrDefault(r => r.GetType() == typeof(BadRequestResult)) != null)
         {
@@ -124,17 +127,17 @@ public partial class CriteriaController : BaseController
         return this.Ok();
     }
 
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("industry/{id:guid}")]
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
-    public IActionResult DeleteCriteria(Guid id)
+    public IActionResult DeleteIndustryCriteria(Guid id)
     {
-        if (this._context.Criteria != null)
+        if (this._context.IndustryCriteria != null)
         {
-            var criteria = this._context.Criteria.FirstOrDefault(p => p.Id == id);
+            var criteria = this._context.IndustryCriteria.FirstOrDefault(p => p.Id == id);
             if (criteria != null)
             {
-                this._context.Criteria.Remove(criteria);
+                this._context.IndustryCriteria.Remove(criteria);
                 this._context.SaveChanges();
                 return this.Ok();
             }

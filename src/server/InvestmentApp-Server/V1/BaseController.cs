@@ -23,7 +23,7 @@ public class BaseController : Controller
     {
         var user = this._context.User
             .AsNoTracking()
-            .SingleOrDefault(u => u.UserName == userName);
+            .FirstOrDefault(u => u.UserName == userName);
 
         return user != null && this._passwordManager.Verify(password, user.PasswordHash);
     }

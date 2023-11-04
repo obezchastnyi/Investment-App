@@ -4,8 +4,8 @@ using System.Linq;
 using InvestmentApp.Attributes;
 using InvestmentApp.DB;
 using InvestmentApp.Interfaces;
-using InvestmentApp.Models.Investors;
-using InvestmentApp.V1.DTOs.Investors;
+using InvestmentApp.Models.Experts;
+using InvestmentApp.V1.DTOs.Experts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,15 +14,15 @@ using Microsoft.Extensions.Logging;
 namespace InvestmentApp.V1.Controllers;
 
 [V1]
-[Route("v{version:apiVersion}/investor/project")]
+[Route("v{version:apiVersion}/expert/project")]
 [ApiController]
-public class InvestorProjectController : BaseController
+public class ExpertProjectController : BaseController
 {
     private readonly InvestmentAppDbContext _context;
-    private readonly ILogger<InvestorProjectController> _logger;
+    private readonly ILogger<ExpertProjectController> _logger;
 
-    public InvestorProjectController(
-        ILogger<InvestorProjectController> logger, InvestmentAppDbContext context, IPasswordManager passwordManager)
+    public ExpertProjectController(
+        ILogger<ExpertProjectController> logger, InvestmentAppDbContext context, IPasswordManager passwordManager)
         : base(context, passwordManager)
     {
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -30,59 +30,59 @@ public class InvestorProjectController : BaseController
     }
 
     [HttpGet("all")]
-    [ProducesResponseType(typeof(IEnumerable<InvestorProject>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<ExpertProject>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
-    public IActionResult GetAllInvestorProjects()
+    public IActionResult GetAllExpertProjects()
     {
-        if (this._context.InvestorProject != null)
+        if (this._context.ExpertProject != null)
         {
-            return this.Ok(this._context.InvestorProject
-                .Include(e => e.Investor)
+            return this.Ok(this._context.ExpertProject
+                .Include(e => e.Expert)
                 .Include(e => e.Project)
                 .AsNoTracking());
         }
 
-        this._logger.LogError($"{nameof(InvestorProject)} table is empty.");
+        this._logger.LogError($"{nameof(ExpertProject)} table is empty.");
         return this.NotFound();
     }
 
     [HttpGet("{id:guid}")]
-    [ProducesResponseType(typeof(InvestorProject), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExpertProject), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
-    public IActionResult GetInvestorProject(Guid id)
+    public IActionResult GetExpertProject(Guid id)
     {
-        if (this._context.InvestorProject != null)
+        if (this._context.ExpertProject != null)
         {
-            var investor = this._context.InvestorProject
-                .Include(e => e.Investor)
+            var expert = this._context.ExpertProject
+                .Include(e => e.Expert)
                 .Include(e => e.Project)
                 .AsNoTracking()
                 .FirstOrDefault(p => p.Id == id);
 
-            if (investor != null)
+            if (expert != null)
             {
-                return this.Ok(investor);
+                return this.Ok(expert);
             }
 
-            this._logger.LogError($"{nameof(InvestorProject)} '{id}' has not been found.");
+            this._logger.LogError($"{nameof(ExpertProject)} '{id}' has not been found.");
             return this.NotFound();
         }
 
-        this._logger.LogError($"{nameof(InvestorProject)} table is empty.");
+        this._logger.LogError($"{nameof(ExpertProject)} table is empty.");
         return this.NotFound();
     }
 
     [HttpPost("")]
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
-    public IActionResult CreateInvestorProject([FromBody] InvestorProjectDto investorProject)
+    public IActionResult CreateExpertProject([FromBody] ExpertProjectDto expertProject)
     {
-        this._context.InvestorProject.Add(new InvestorProject
+        this._context.ExpertProject.Add(new ExpertProject
         {
-            InvestorId = investorProject.InvestorId,
-            ProjectId = investorProject.ProjectId,
-            MinIncomeRate = investorProject.MinIncomeRate,
-            MaxRiskRate = investorProject.MaxRiskRate,
+            ExpertId = expertProject.ExpertId,
+            ProjectId = expertProject.ProjectId,
+            PeriodId = expertProject.PeriodId,
+            PossibilityId = expertProject.PossibilityId,
         });
 
         this._context.SaveChanges();
@@ -93,37 +93,37 @@ public class InvestorProjectController : BaseController
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
-    public IActionResult UpdateInvestorProject([FromBody] InvestorProject investorProject)
+    public IActionResult UpdateExpertProject([FromBody] ExpertProject expertProject)
     {
-        if (investorProject.Id == default)
+        if (expertProject.Id == default)
         {
             return this.BadRequest();
         }
 
-        var foundProject = this._context.InvestorProject.FirstOrDefault(p => p.Id == investorProject.Id);
+        var foundProject = this._context.ExpertProject.FirstOrDefault(p => p.Id == expertProject.Id);
         if (foundProject == null)
         {
             return this.NotFound();
         }
 
-        if (investorProject.InvestorId != default)
+        if (expertProject.ExpertId != default)
         {
-            foundProject.InvestorId = investorProject.InvestorId;
+            foundProject.ExpertId = expertProject.ExpertId;
         }
 
-        if (investorProject.ProjectId != default)
+        if (expertProject.ProjectId != default)
         {
-            foundProject.ProjectId = investorProject.ProjectId;
+            foundProject.ProjectId = expertProject.ProjectId;
         }
 
-        if (investorProject.MinIncomeRate != default)
+        if (expertProject.PeriodId != default)
         {
-            foundProject.MinIncomeRate = investorProject.MinIncomeRate;
+            foundProject.PeriodId = expertProject.PeriodId;
         }
 
-        if (investorProject.MaxRiskRate != default)
+        if (expertProject.PossibilityId != default)
         {
-            foundProject.MaxRiskRate = investorProject.MaxRiskRate;
+            foundProject.PossibilityId = expertProject.PossibilityId;
         }
 
         this._context.SaveChanges();
@@ -134,9 +134,9 @@ public class InvestorProjectController : BaseController
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
-    public IActionResult UpdateInvestorProjects([FromBody] IEnumerable<InvestorProject> investorProjects)
+    public IActionResult UpdateExpertProjects([FromBody] IEnumerable<ExpertProject> expertProjects)
     {
-        var results = investorProjects.Select(this.UpdateInvestorProject).ToList();
+        var results = expertProjects.Select(this.UpdateExpertProject).ToList();
 
         if (results.FirstOrDefault(r => r.GetType() == typeof(BadRequestResult)) != null)
         {
@@ -154,23 +154,23 @@ public class InvestorProjectController : BaseController
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
-    public IActionResult DeleteInvestorProject(Guid id)
+    public IActionResult DeleteExpertProject(Guid id)
     {
-        if (this._context.InvestorProject != null)
+        if (this._context.ExpertProject != null)
         {
-            var investorProject = this._context.InvestorProject.FirstOrDefault(p => p.Id == id);
-            if (investorProject != null)
+            var expertProject = this._context.ExpertProject.FirstOrDefault(p => p.Id == id);
+            if (expertProject != null)
             {
-                this._context.InvestorProject.Remove(investorProject);
+                this._context.ExpertProject.Remove(expertProject);
                 this._context.SaveChanges();
                 return this.Ok();
             }
 
-            this._logger.LogError($"{nameof(InvestorProject)} '{id}' has not been found.");
+            this._logger.LogError($"{nameof(expertProject)} '{id}' has not been found.");
             return this.NotFound();
         }
 
-        this._logger.LogError($"{nameof(InvestorProject)} table is empty.");
+        this._logger.LogError($"{nameof(ExpertProject)} table is empty.");
         return this.NotFound();
     }
 }

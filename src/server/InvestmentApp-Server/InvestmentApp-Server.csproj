@@ -79,5 +79,11 @@
     <Compile Update="DB\IndustryContext.cs">
       <DependentUpon>InvestmentAppDbContext.cs</DependentUpon>
     </Compile>
+    <Compile Update="V1\Controllers\Industries\CriteriaController.Industry.cs">
+      <DependentUpon>CriteriaController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="V1\Controllers\Industries\IndustryController.Expert.cs">
+      <DependentUpon>IndustryController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

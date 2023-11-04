@@ -52,7 +52,7 @@ public class EnterpriseController : BaseController
         {
             var enterprise = this._context.Enterprise
                 .AsNoTracking()
-                .SingleOrDefault(p => p.Id == id);
+                .FirstOrDefault(p => p.Id == id);
 
             if (enterprise != null)
             {
@@ -95,7 +95,7 @@ public class EnterpriseController : BaseController
             return this.BadRequest();
         }
 
-        var foundEnterprise = this._context.Enterprise.SingleOrDefault(p => p.Id == enterprise.Id);
+        var foundEnterprise = this._context.Enterprise.FirstOrDefault(p => p.Id == enterprise.Id);
         if (foundEnterprise == null)
         {
             return this.NotFound();
@@ -133,12 +133,12 @@ public class EnterpriseController : BaseController
     {
         var results = enterprises.Select(this.UpdateEnterprise).ToList();
 
-        if (results.SingleOrDefault(r => r.GetType() == typeof(BadRequestResult)) != null)
+        if (results.FirstOrDefault(r => r.GetType() == typeof(BadRequestResult)) != null)
         {
             return this.BadRequest();
         }
 
-        if (results.SingleOrDefault(r => r.GetType() == typeof(NotFoundResult)) != null)
+        if (results.FirstOrDefault(r => r.GetType() == typeof(NotFoundResult)) != null)
         {
             return this.BadRequest();
         }
@@ -153,7 +153,7 @@ public class EnterpriseController : BaseController
     {
         if (this._context.Enterprise != null)
         {
-            var enterprise = this._context.Enterprise.SingleOrDefault(p => p.Id == id);
+            var enterprise = this._context.Enterprise.FirstOrDefault(p => p.Id == id);
             if (enterprise != null)
             {
                 this._context.Enterprise.Remove(enterprise);

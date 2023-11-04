@@ -4,25 +4,25 @@ using System.Linq;
 using InvestmentApp.Attributes;
 using InvestmentApp.DB;
 using InvestmentApp.Interfaces;
-using InvestmentApp.Models.Industries;
-using InvestmentApp.V1.DTOs.Industries;
+using InvestmentApp.Models.Experts;
+using InvestmentApp.V1.DTOs.Experts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace InvestmentApp.V1.Controllers.Industries;
+namespace InvestmentApp.V1.Controllers;
 
 [V1]
-[Route("v{version:apiVersion}/industry")]
+[Route("v{version:apiVersion}/expert")]
 [ApiController]
-public partial class IndustryController : BaseController
+public class ExpertController : BaseController
 {
     private readonly InvestmentAppDbContext _context;
-    private readonly ILogger<IndustryController> _logger;
+    private readonly ILogger<ExpertController> _logger;
 
-    public IndustryController(
-        ILogger<IndustryController> logger, InvestmentAppDbContext context, IPasswordManager passwordManager)
+    public ExpertController(
+        ILogger<ExpertController> logger, InvestmentAppDbContext context, IPasswordManager passwordManager)
         : base(context, passwordManager)
     {
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -30,49 +30,54 @@ public partial class IndustryController : BaseController
     }
 
     [HttpGet("all")]
-    [ProducesResponseType(typeof(IEnumerable<Industry>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<Expert>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
-    public IActionResult GetAllIndustries()
+    public IActionResult GetAllExperts()
     {
-        if (this._context.Industry != null)
+        if (this._context.Expert != null)
         {
-            return this.Ok(this._context.Industry.AsNoTracking());
+            return this.Ok(this._context.Expert.AsNoTracking());
         }
 
-        this._logger.LogError($"{nameof(Industry)} table is empty.");
+        this._logger.LogError($"{nameof(Expert)} table is empty.");
         return this.NotFound();
     }
 
     [HttpGet("{id:guid}")]
-    [ProducesResponseType(typeof(Industry), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Expert), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
-    public IActionResult GetIndustry(Guid id)
+    public IActionResult GetExpert(Guid id)
     {
-        if (this._context.Industry != null)
+        if (this._context.Expert != null)
         {
-            var industry = this._context.Industry
+            var expert = this._context.Expert
                 .AsNoTracking()
                 .FirstOrDefault(p => p.Id == id);
 
-            if (industry != null)
+            if (expert != null)
             {
-                return this.Ok(industry);
+                return this.Ok(expert);
             }
 
-            this._logger.LogError($"{nameof(Industry)} '{id}' has not been found.");
+            this._logger.LogError($"{nameof(Expert)} '{id}' has not been found.");
             return this.NotFound();
         }
 
-        this._logger.LogError($"{nameof(Industry)} table is empty.");
+        this._logger.LogError($"{nameof(Expert)} table is empty.");
         return this.NotFound();
     }
 
     [HttpPost("")]
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
-    public IActionResult CreateIndustry([FromBody] IndustryDto industry)
+    public IActionResult CreateExpert([FromBody] ExpertDto expert)
     {
-        this._context.Industry.Add(new Industry { Name = industry.Name });
+        this._context.Expert.Add(new Expert
+        {
+            Name = expert.Name,
+            SurName = expert.SurName,
+        });
+
         this._context.SaveChanges();
         return this.Ok();
     }
@@ -81,22 +86,27 @@ public partial class IndustryController : BaseController
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
-    public IActionResult UpdateIndustry([FromBody] Industry industry)
+    public IActionResult UpdateExpert([FromBody] Expert expert)
     {
-        if (industry.Id == default)
+        if (expert.Id == default)
         {
             return this.BadRequest();
         }
 
-        var foundIndustry = this._context.Industry.FirstOrDefault(p => p.Id == industry.Id);
-        if (foundIndustry == null)
+        var foundExpert = this._context.Expert.FirstOrDefault(p => p.Id == expert.Id);
+        if (foundExpert == null)
         {
             return this.NotFound();
         }
 
-        if (!string.IsNullOrEmpty(industry.Name))
+        if (!string.IsNullOrEmpty(expert.Name))
         {
-            foundIndustry.Name = industry.Name;
+            foundExpert.Name = expert.Name;
+        }
+
+        if (!string.IsNullOrEmpty(expert.SurName))
+        {
+            foundExpert.SurName = expert.SurName;
         }
 
         this._context.SaveChanges();
@@ -107,9 +117,9 @@ public partial class IndustryController : BaseController
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status404NotFound)]
-    public IActionResult UpdateIndustries([FromBody] IEnumerable<Industry> industries)
+    public IActionResult UpdateExperts([FromBody] IEnumerable<Expert> experts)
     {
-        var results = industries.Select(this.UpdateIndustry).ToList();
+        var results = experts.Select(this.UpdateExpert).ToList();
 
         if (results.FirstOrDefault(r => r.GetType() == typeof(BadRequestResult)) != null)
         {
@@ -118,7 +128,7 @@ public partial class IndustryController : BaseController
 
         if (results.FirstOrDefault(r => r.GetType() == typeof(NotFoundResult)) != null)
         {
-            return this.NotFound();
+            return this.BadRequest();
         }
 
         return this.Ok();
@@ -127,23 +137,23 @@ public partial class IndustryController : BaseController
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
-    public IActionResult DeleteIndustry(Guid id)
+    public IActionResult DeleteExpert(Guid id)
     {
-        if (this._context.Industry != null)
+        if (this._context.Expert != null)
         {
-            var industry = this._context.Industry.FirstOrDefault(p => p.Id == id);
-            if (industry != null)
+            var expert = this._context.Expert.FirstOrDefault(p => p.Id == id);
+            if (expert != null)
             {
-                this._context.Industry.Remove(industry);
+                this._context.Expert.Remove(expert);
                 this._context.SaveChanges();
                 return this.Ok();
             }
 
-            this._logger.LogError($"{nameof(Industry)} '{id}' has not been found.");
+            this._logger.LogError($"{nameof(Expert)} '{id}' has not been found.");
             return this.NotFound();
         }
 
-        this._logger.LogError($"{nameof(Industry)} table is empty.");
+        this._logger.LogError($"{nameof(Expert)} table is empty.");
         return this.NotFound();
     }
 }

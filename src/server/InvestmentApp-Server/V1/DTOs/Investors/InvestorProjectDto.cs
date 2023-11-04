@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InvestmentApp.V1.DTOs.Projects;
+namespace InvestmentApp.V1.DTOs.Investors;
 
 public class InvestorProjectDto
 {

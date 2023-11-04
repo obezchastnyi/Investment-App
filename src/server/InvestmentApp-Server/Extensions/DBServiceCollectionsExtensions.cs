@@ -6,7 +6,8 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class DbServiceCollectionsExtensions
 {
-    public static IServiceCollection AddDbServices<T>(this IServiceCollection services, string connectionString, string pgVersionString)
+    public static IServiceCollection AddDbServices<T>(
+        this IServiceCollection services, string connectionString, string pgVersionString)
         where T : DbContext
     {
         if (services == null)

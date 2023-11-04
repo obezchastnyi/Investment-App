@@ -1,6 +1,6 @@
-﻿namespace InvestmentApp.V1.DTOs.Investors;
+﻿namespace InvestmentApp.V1.DTOs.Experts;
 
-public class InvestorDto
+public class ExpertDto
 {
     public string Name { get; set; }
 
