@@ -12,7 +12,9 @@ export interface Project {
 
 export interface ProjectRow extends DataTableRow {
     id: string,
+    internalId: string;
     name: string;
     startingInvestmentSum: number;
     enterprise: string;
+    enterpriseId: string;
 }

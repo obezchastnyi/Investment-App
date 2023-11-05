@@ -10,6 +10,7 @@ export interface User {
 
 export interface UserRow extends DataTableRow {
     id: string,
+    internalId: string;
     userName: string;
     role: string;
 }

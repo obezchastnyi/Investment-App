@@ -26,8 +26,9 @@ public class ForecastingController : BaseController
 
     [HttpGet("")]
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
-    public IActionResult Get()
+    public IActionResult Forecast()
     {
-        return this.Ok();
+        var rand = new Random();
+        return this.Ok(rand.Next(12345678));
     }
 }

@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { DataTableComponent, DataTableColumnComponent, DataTableColumnTemplateWrapperComponent } from './components';
+import { EnterpriseCacheService } from './services/enterprise-cache.service';
 
 @NgModule({
     declarations: [
@@ -17,6 +18,9 @@ import { DataTableComponent, DataTableColumnComponent, DataTableColumnTemplateWr
         CommonModule,
         NgxDatatableModule,
         RouterModule,
+    ],
+    providers: [
+        EnterpriseCacheService,
     ],
     exports: [
         FormsModule,

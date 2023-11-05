@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
 import { FormationComponent } from '.';
+import { FormationRoutingModule } from './formation-routing.module';
 
 @NgModule({
     declarations: [
@@ -9,7 +10,7 @@ import { FormationComponent } from '.';
     ],
     imports: [
         CommonModule,
-        FormationComponent,
+        FormationRoutingModule,
         SharedModule,
     ],
 })

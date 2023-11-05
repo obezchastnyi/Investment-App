@@ -16,6 +16,46 @@ import { FormationComponent } from './features/formation';
 import { EnterpriseComponent } from './features/enterprise';
 import { CriteriaComponent, IndustryCriteriaComponent } from './features/criteria';
 import { ExpertIndustryComponent, IndustryComponent } from './features/industry';
+import { AssessmentModule } from './features/assessment/assessment.module';
+import { CalculationModule } from './features/calculation/calculation.module';
+import { CriteriaModule } from './features/criteria/criteria.module';
+import { EnterpriseModule } from './features/enterprise/enterprise.module';
+import { EvaluationModule } from './features/evaluation/evaluation.module';
+import { ForecastingModule } from './features/forecasting/forecasting.module';
+import { IndustryModule } from './features/industry/industry.module';
+import { FormationModule } from './features/formation/formation.module';
+
+export function getAssessmentModule(): any {
+    return AssessmentModule;
+}
+
+export function getCalculationModule(): any {
+    return CalculationModule;
+}
+
+export function getCriteriaModule(): any {
+    return CriteriaModule;
+}
+
+export function getEnterpriseModule(): any {
+    return EnterpriseModule;
+}
+
+export function getEvaluationModule(): any {
+    return EvaluationModule;
+}
+
+export function getForecastingModule(): any {
+    return ForecastingModule;
+}
+
+export function getFormationModule(): any {
+    return FormationModule;
+}
+
+export function getIndustryModule(): any {
+    return IndustryModule;
+}
 
 export function getProjectModule(): any {
     return ProjectModule;

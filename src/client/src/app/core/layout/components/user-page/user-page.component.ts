@@ -1,4 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { BehaviorSubject, Observable, of } from "rxjs";
 import { ActionRow, DataTableColumn } from 'src/app/models';
 import { AuthenticationService } from 'src/app/shared/services';
@@ -18,9 +19,11 @@ export class UserPageComponent implements OnInit {
     userName: string;
     role: string;
 
-    constructor(private authService: AuthenticationService) {
+    constructor(private authService: AuthenticationService, private titleService: Title) {
         this.userName = this.authService.userName;
         this.role = this.authService.role;
+
+        this.titleService.setTitle('User Page - Investments');
     }
 
     ngOnInit(): void {
@@ -127,6 +130,12 @@ export class UserPageComponent implements OnInit {
                     },
                 ]);
                 break;
+        }
+    }
+
+    logout(): void {
+        if (confirm('Do you really want to log out from Investment App?')) {
+            this.authService.logout();
         }
     }
 }

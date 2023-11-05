@@ -79,7 +79,7 @@ export class ExpertProjectComponent implements OnInit {
         this.projectsTableColumnsObs = new BehaviorSubject<DataTableColumn[]>(PROJECT_TABLE_COLUMNS).asObservable();
         this.projectsTableRowsObs = this.dataService.getTableRows();
 
-        this.enterprisesObs = this.dataService.getEnterprises();
+        //this.enterprisesObs = this.dataService.getEnterprises();
     }
 
     onInputChange(row: ProjectRow, value: any, column: string) {

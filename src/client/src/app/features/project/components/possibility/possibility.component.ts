@@ -1,9 +1,8 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { AuthenticationService, ProjectCacheService } from '../../../../shared/services';
-import { ProjectRow, DataTableColumn } from '../../../../models';
-import { Enterprise } from 'src/app/models/enterprise';
+import { AuthenticationService, PossibilityCacheService } from '../../../../shared/services';
+import { DataTableColumn, PossibilityRow } from '../../../../models';
 
 @Component({
     selector: 'ia-possibility',
@@ -14,21 +13,18 @@ export class PossibilityComponent implements OnInit {
 
     @ViewChild('inputTemplate', { static: true }) inputTemplate: TemplateRef<unknown>;
     @ViewChild('rowDeleteTemplate', { static: true }) rowDeleteTemplate: TemplateRef<unknown>;
-    @ViewChild('dropdownTemplate', { static: true }) dropdownTemplate: TemplateRef<unknown>;
 
     tableHeight = window.innerHeight - 150;
 
-    projectsTableColumnsObs: Observable<DataTableColumn[]>;
-    projectsTableRowsObs: Observable<ProjectRow[] | null>;
-    updatedProjects: ProjectRow[] = []
+    dataTableColumnsObs: Observable<DataTableColumn[]>;
+    dataTableRowsObs: Observable<PossibilityRow[] | null>;
+    updatedData: PossibilityRow[] = []
 
     userName: string;
     role: string;
 
-    enterprisesObs: Observable<Enterprise[] | null>;
-
     constructor(private titleService: Title,
-        private dataService: ProjectCacheService,
+        private dataService: PossibilityCacheService,
         private authService: AuthenticationService
     ) {
         this.titleService.setTitle('Possibility - Investments');
@@ -38,66 +34,54 @@ export class PossibilityComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        const PROJECT_TABLE_COLUMNS: DataTableColumn[] = [
+        const POSSIBILITY_TABLE_COLUMNS: DataTableColumn[] = [
+            {
+                prop: 'internalId',
+                name: 'ID',
+                sortable: true,
+                width: 100,
+                flexGrow: 1,
+                draggable: false,
+            },
+            {
+                prop: 'rate',
+                name: 'Rate',
+                innerTemplate: this.inputTemplate,
+                sortable: true,
+                width: 300,
+                flexGrow: 1,
+                draggable: false,
+            },
             {
                 name: '',
                 innerTemplate: this.rowDeleteTemplate,
                 sortable: false,
-                width: 100, // 13 for the checkbox + 28 default left padding + 9 right padding
+                width: 80,
                 canAutoResize: false,
                 resizeable: false,
                 draggable: false,
             },
-            {
-                prop: 'name',
-                name: 'Name',
-                innerTemplate: this.inputTemplate,
-                sortable: true,
-                width: 300,
-                flexGrow: 1,
-                draggable: false,
-            },
-            {
-                prop: 'startingInvestmentSum',
-                name: 'Starting Investment Sum',
-                innerTemplate: this.inputTemplate,
-                sortable: true,
-                width: 300,
-                flexGrow: 1,
-                draggable: false,
-            },
-            {
-                prop: 'enterprise',
-                name: 'Enterprise',
-                innerTemplate: this.dropdownTemplate,
-                sortable: true,
-                width: 300,
-                flexGrow: 1,
-                draggable: false,
-            },
         ];
-        this.projectsTableColumnsObs = new BehaviorSubject<DataTableColumn[]>(PROJECT_TABLE_COLUMNS).asObservable();
-        this.projectsTableRowsObs = this.dataService.getTableRows();
-
-        this.enterprisesObs = this.dataService.getEnterprises();
+        this.dataTableColumnsObs = new BehaviorSubject<DataTableColumn[]>(POSSIBILITY_TABLE_COLUMNS).asObservable();
+        this.dataTableRowsObs = this.dataService.getTableRows();
     }
 
-    onInputChange(row: ProjectRow, value: any, column: string) {
+    onInputChange(row: PossibilityRow, value: any, column: string) {
         let changedRow = { ...row };
-        if (this.updatedProjects.indexOf(changedRow) === -1) {
-            this.updatedProjects.push(changedRow)
+        if (this.updatedData.indexOf(changedRow) === -1) {
+            this.updatedData.push(changedRow)
         }
 
-        this.updatedProjects[(this.updatedProjects.indexOf(changedRow))][column] = value;
+        this.updatedData[(this.updatedData.indexOf(changedRow))][column] = value;
     }
 
-    onRowUpdate(row: ProjectRow, value: any, column: string) {
+    onRowUpdate(row: PossibilityRow, value: any, column: string) {
         let updatedRow = { ...row };
         updatedRow[column] = value;
         this.dataService.updateTableRow(updatedRow);
     }
 
-    onRowDelete(row: ProjectRow) {
+    onRowDelete(row: PossibilityRow) {
         this.dataService.confirmRowDeleting(row.id);
     }
 
@@ -110,15 +94,10 @@ export class PossibilityComponent implements OnInit {
     }
 
     confirmAllUpdates() {
-        if (this.updatedProjects.find(p => p.name == '' || p.startingInvestmentSum.toString() == '')) {
+        if (this.updatedData.find(d => Object.values(d).find(v => v.toString() === ''))) {
             alert('There are invalid fields in Table');
             return;
         }
-        this.dataService.confirmAllUpdates(this.updatedProjects);
-    }
-
-    onEnterpriseChange(row: ProjectRow, enterprise: string) {
-        row.enterprise = enterprise;
-        this.dataService.updateTableRow(row);
+        this.dataService.confirmAllUpdates(this.updatedData);
     }
 }

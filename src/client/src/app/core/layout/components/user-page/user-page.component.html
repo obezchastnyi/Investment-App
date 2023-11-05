@@ -1,26 +1,27 @@
 <div class="profile container mb-4 p-3 d-flex justify-content-center">
   <div class="card p-4">
     <div class="image d-flex flex-column justify-content-center align-items-center">
-      <button class="btn btn-secondary" [ngSwitch]="role">
-        <img src="/assets/admin.png" height="70" width="70" *ngSwitchCase="'Admin'"/>
-        <img src="/assets/reader.png" height="70" width="70" *ngSwitchCase="'Reader'"/>
-        <img src="/assets/writer.png" height="70" width="70" *ngSwitchCase="'Writer'"/>
-        <img src="/assets/creator.png" height="70" width="70" *ngSwitchCase="'Creator'"/>
-      </button>
+      <div [ngSwitch]="role">
+        <img src="/assets/admin.png" height="50" width="50" *ngSwitchCase="'Admin'" />
+        <img src="/assets/reader.png" height="50" width="50" *ngSwitchCase="'Reader'" />
+        <img src="/assets/writer.png" height="50" width="50" *ngSwitchCase="'Writer'" />
+        <img src="/assets/creator.png" height="50" width="50" *ngSwitchCase="'Creator'" />
+      </div>
 
       <div class="row">
-        <h5 class="px-3 rounded username mt-3 mr-3">{{ userName }}</h5>
-        <h5 class="px-3 rounded role mt-3 ml-3">{{ role }}</h5>
+        <h5 class="mt-3 mr-3">{{ userName }} [{{ role }}]</h5>
       </div>
 
       <ia-data-table class="mt-3" [columnsObs]="actionsTableColumnsObs" [rowsObs]="actionsTableRowsObs"
-                     [allowScroll]="true" [headerHeight]="50" [rowHeight]="70" [tableHeight]="340">
+        [allowScroll]="true" [headerHeight]="50" [rowHeight]="70" [tableHeight]="340">
       </ia-data-table>
     </div>
+
+    <button class="logout-btn btn btn-outline-danger" type="button" (click)="logout()">Logout</button>
   </div>
 </div>
 
 <ng-template #checkTemplate let-row="row" let-value="value">
-  <img *ngIf="value > 0" src="/assets/check.png" height="50" width="50"/>
-  <img *ngIf="value === 0" src="/assets/no_check.png" height="50" width="50"/>
+  <img *ngIf="value > 0" src="/assets/check.png" height="30" width="30" />
+  <img *ngIf="value === 0" src="/assets/no_check.png" height="30" width="30" />
 </ng-template>

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
 import { EvaluationComponent } from '.';
+import { EvaluationRoutingModule } from './evaluation-routing.module';
 
 @NgModule({
     declarations: [
@@ -9,7 +10,7 @@ import { EvaluationComponent } from '.';
     ],
     imports: [
         CommonModule,
-        EvaluationComponent,
+        EvaluationRoutingModule,
         SharedModule,
     ],
 })

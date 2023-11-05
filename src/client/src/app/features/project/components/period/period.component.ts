@@ -1,8 +1,8 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { AuthenticationService, ProjectCacheService } from '../../../../shared/services';
-import { ProjectRow, DataTableColumn } from '../../../../models';
+import { AuthenticationService, PeriodCacheService } from '../../../../shared/services';
+import { DataTableColumn, PeriodRow } from '../../../../models';
 import { Enterprise } from 'src/app/models/enterprise';
 
 @Component({
@@ -14,13 +14,13 @@ export class PeriodComponent implements OnInit {
 
     @ViewChild('inputTemplate', { static: true }) inputTemplate: TemplateRef<unknown>;
     @ViewChild('rowDeleteTemplate', { static: true }) rowDeleteTemplate: TemplateRef<unknown>;
-    @ViewChild('dropdownTemplate', { static: true }) dropdownTemplate: TemplateRef<unknown>;
+    @ViewChild('dateTemplate', { static: true }) dateTemplate: TemplateRef<unknown>;
 
     tableHeight = window.innerHeight - 150;
 
-    projectsTableColumnsObs: Observable<DataTableColumn[]>;
-    projectsTableRowsObs: Observable<ProjectRow[] | null>;
-    updatedProjects: ProjectRow[] = []
+    dataTableColumnsObs: Observable<DataTableColumn[]>;
+    dataTableRowsObs: Observable<PeriodRow[] | null>;
+    updatedData: PeriodRow[] = []
 
     userName: string;
     role: string;
@@ -28,7 +28,7 @@ export class PeriodComponent implements OnInit {
     enterprisesObs: Observable<Enterprise[] | null>;
 
     constructor(private titleService: Title,
-        private dataService: ProjectCacheService,
+        private dataService: PeriodCacheService,
         private authService: AuthenticationService
     ) {
         this.titleService.setTitle('Period - Investments');
@@ -38,66 +38,81 @@ export class PeriodComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        const PROJECT_TABLE_COLUMNS: DataTableColumn[] = [
+        const PERIOD_TABLE_COLUMNS: DataTableColumn[] = [
+            {
+                prop: 'internalId',
+                name: 'ID',
+                sortable: true,
+                width: 100,
+                flexGrow: 1,
+                draggable: false,
+            },
+            {
+                prop: 'startDate',
+                name: 'Start Date',
+                innerTemplate: this.dateTemplate,
+                sortable: true,
+                width: 150,
+                flexGrow: 1,
+                draggable: false,
+            },
+            {
+                prop: 'endDate',
+                name: 'End Date',
+                innerTemplate: this.dateTemplate,
+                sortable: true,
+                width: 150,
+                flexGrow: 1,
+                draggable: false,
+            },
+            {
+                prop: 'discountRate',
+                name: 'Discount Rate (DR)',
+                innerTemplate: this.inputTemplate,
+                sortable: true,
+                width: 100,
+                flexGrow: 1,
+                draggable: false,
+            },
+            {
+                prop: 'riskFreeDiscountRate',
+                name: 'Risk Free DR Rate',
+                innerTemplate: this.inputTemplate,
+                sortable: true,
+                width: 100,
+                flexGrow: 1,
+                draggable: false,
+            },
             {
                 name: '',
                 innerTemplate: this.rowDeleteTemplate,
                 sortable: false,
-                width: 100, // 13 for the checkbox + 28 default left padding + 9 right padding
+                width: 80,
                 canAutoResize: false,
                 resizeable: false,
                 draggable: false,
             },
-            {
-                prop: 'name',
-                name: 'Name',
-                innerTemplate: this.inputTemplate,
-                sortable: true,
-                width: 300,
-                flexGrow: 1,
-                draggable: false,
-            },
-            {
-                prop: 'startingInvestmentSum',
-                name: 'Starting Investment Sum',
-                innerTemplate: this.inputTemplate,
-                sortable: true,
-                width: 300,
-                flexGrow: 1,
-                draggable: false,
-            },
-            {
-                prop: 'enterprise',
-                name: 'Enterprise',
-                innerTemplate: this.dropdownTemplate,
-                sortable: true,
-                width: 300,
-                flexGrow: 1,
-                draggable: false,
-            },
         ];
-        this.projectsTableColumnsObs = new BehaviorSubject<DataTableColumn[]>(PROJECT_TABLE_COLUMNS).asObservable();
-        this.projectsTableRowsObs = this.dataService.getTableRows();
-
-        this.enterprisesObs = this.dataService.getEnterprises();
+        this.dataTableColumnsObs = new BehaviorSubject<DataTableColumn[]>(PERIOD_TABLE_COLUMNS).asObservable();
+        this.dataTableRowsObs = this.dataService.getTableRows();
     }
 
-    onInputChange(row: ProjectRow, value: any, column: string) {
+    onInputChange(row: PeriodRow, value: any, column: string) {
         let changedRow = { ...row };
-        if (this.updatedProjects.indexOf(changedRow) === -1) {
-            this.updatedProjects.push(changedRow)
+        if (this.updatedData.indexOf(changedRow) === -1) {
+            this.updatedData.push(changedRow)
         }
 
-        this.updatedProjects[(this.updatedProjects.indexOf(changedRow))][column] = value;
+        this.updatedData[(this.updatedData.indexOf(changedRow))][column] = value;
     }
 
-    onRowUpdate(row: ProjectRow, value: any, column: string) {
+    onRowUpdate(row: PeriodRow, value: any, column: string) {
         let updatedRow = { ...row };
         updatedRow[column] = value;
         this.dataService.updateTableRow(updatedRow);
     }
 
-    onRowDelete(row: ProjectRow) {
+    onRowDelete(row: PeriodRow) {
         this.dataService.confirmRowDeleting(row.id);
     }
 
@@ -110,15 +125,10 @@ export class PeriodComponent implements OnInit {
     }
 
     confirmAllUpdates() {
-        if (this.updatedProjects.find(p => p.name == '' || p.startingInvestmentSum.toString() == '')) {
+        if (this.updatedData.find(d => Object.values(d).find(v => v.toString() === ''))) {
             alert('There are invalid fields in Table');
             return;
         }
-        this.dataService.confirmAllUpdates(this.updatedProjects);
-    }
-
-    onEnterpriseChange(row: ProjectRow, enterprise: string) {
-        row.enterprise = enterprise;
-        this.dataService.updateTableRow(row);
+        this.dataService.confirmAllUpdates(this.updatedData);
     }
 }

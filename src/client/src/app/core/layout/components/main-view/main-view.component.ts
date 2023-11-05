@@ -1,4 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { BehaviorSubject, Observable, of } from "rxjs";
 import { ActionRow, DataTableColumn } from 'src/app/models';
@@ -21,9 +22,11 @@ export class MainViewComponent implements OnInit {
     userName: string;
     role: string;
 
-    constructor(private authService: AuthenticationService) {
+    constructor(private authService: AuthenticationService, private titleService: Title) {
         this.userName = this.authService.userName;
         this.role = this.authService.role;
+
+        this.titleService.setTitle('Home - Investments');
     }
 
     ngOnInit(): void {

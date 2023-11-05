@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
 import { CriteriaComponent, IndustryCriteriaComponent } from '.';
+import { CriteriaRoutingModule } from './criteria-routing.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
     declarations: [
@@ -10,8 +12,8 @@ import { CriteriaComponent, IndustryCriteriaComponent } from '.';
     ],
     imports: [
         CommonModule,
-        CriteriaComponent,
-        IndustryCriteriaComponent,
+        CriteriaRoutingModule,
+        FontAwesomeModule,
         SharedModule,
     ],
 })

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { AuthenticationService } from '../../../../shared/services';
+import { Observable } from 'rxjs';
+import { EvaluateCacheService } from 'src/app/shared/services/evaluate-cache.service';
 
 @Component({
     selector: 'ia-evaluation',
@@ -12,8 +14,11 @@ export class EvaluationComponent implements OnInit {
     userName: string;
     role: string;
 
+    resultObs: Observable<number | null>;
+
     constructor(private titleService: Title,
-        private authService: AuthenticationService
+        private authService: AuthenticationService,
+        private dataService: EvaluateCacheService,
     ) {
         this.titleService.setTitle('Evaluation - Investments');
 
@@ -22,5 +27,10 @@ export class EvaluationComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.resultObs = this.dataService.getTableRows();
+    }
+
+    onCalculate() {
+        this.dataService.loadDataFromApi();
     }
 }

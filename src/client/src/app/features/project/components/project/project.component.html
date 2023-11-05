@@ -1,17 +1,19 @@
 <div class="page-view">
-  <div class="row justify-content-center mb-3 mr-1 ml-1">
+  <div class="row mb-3 mr-1 ml-1">
     <div class="mr-3">
       <button type="button" class="btn btn-primary" [disabled]="role != 'Admin' && role != 'Creator'"
         (click)="addNewRow()">Add Project</button>
     </div>
 
     <div class="ml-3">
-      <button type="button" class="btn btn-success" [disabled]="role != 'Admin' && role != 'Writer'"
+      <button type="button" class="btn btn-success"
+        [ngClass]="{ 'd-none': (role != 'Admin' && role != 'Writer') || updatedProjects.length < 2 }"
         (click)="confirmAllUpdates()">Confirm All Updates</button>
     </div>
 
     <div class="ml-3">
-      <button type="button" class="btn btn-warning" [disabled]="role != 'Admin' && role != 'Writer'"
+      <button type="button" class="btn btn-warning"
+        [ngClass]="{ 'd-none': (role != 'Admin' && role != 'Writer') || updatedProjects.length < 2 }"
         (click)="discardAllChanges()">Discard All Updates</button>
     </div>
   </div>
@@ -61,5 +63,11 @@
           enterprise.name }}</button>
       </div>
     </div>
+  </ng-template>
+
+  <ng-template #linkTemplate let-row="row" let-value="value" let-column="column">
+    <a href="/enterprise#:~:text={{ transformLink(value) }}" style="margin-left: 5px;">
+      <fa-icon [icon]="faLink"></fa-icon>
+    </a>
   </ng-template>
 </div>

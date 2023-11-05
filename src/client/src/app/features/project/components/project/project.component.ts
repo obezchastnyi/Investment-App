@@ -3,7 +3,8 @@ import { Title } from '@angular/platform-browser';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { AuthenticationService, ProjectCacheService } from '../../../../shared/services';
 import { ProjectRow, DataTableColumn } from '../../../../models';
-import { Enterprise } from 'src/app/models/enterprise';
+import { EnterpriseRow } from 'src/app/models/enterprise';
+import { faLink } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'ia-project',
@@ -12,9 +13,12 @@ import { Enterprise } from 'src/app/models/enterprise';
 })
 export class ProjectComponent implements OnInit {
 
+    faLink = faLink;
+
     @ViewChild('inputTemplate', { static: true }) inputTemplate: TemplateRef<unknown>;
     @ViewChild('rowDeleteTemplate', { static: true }) rowDeleteTemplate: TemplateRef<unknown>;
     @ViewChild('dropdownTemplate', { static: true }) dropdownTemplate: TemplateRef<unknown>;
+    @ViewChild('linkTemplate', { static: true }) linkTemplate: TemplateRef<unknown>;
 
     tableHeight = window.innerHeight - 150;
 
@@ -25,11 +29,11 @@ export class ProjectComponent implements OnInit {
     userName: string;
     role: string;
 
-    enterprisesObs: Observable<Enterprise[] | null>;
+    enterprisesObs: Observable<EnterpriseRow[] | null>;
 
     constructor(private titleService: Title,
         private dataService: ProjectCacheService,
-        private authService: AuthenticationService
+        private authService: AuthenticationService,
     ) {
         this.titleService.setTitle('Project - Investments');
 
@@ -40,12 +44,11 @@ export class ProjectComponent implements OnInit {
     ngOnInit(): void {
         const PROJECT_TABLE_COLUMNS: DataTableColumn[] = [
             {
-                name: '',
-                innerTemplate: this.rowDeleteTemplate,
-                sortable: false,
-                width: 100, // 13 for the checkbox + 28 default left padding + 9 right padding
-                canAutoResize: false,
-                resizeable: false,
+                prop: 'internalId',
+                name: 'ID',
+                sortable: true,
+                width: 100,
+                flexGrow: 1,
                 draggable: false,
             },
             {
@@ -71,8 +74,24 @@ export class ProjectComponent implements OnInit {
                 name: 'Enterprise',
                 innerTemplate: this.dropdownTemplate,
                 sortable: true,
-                width: 300,
                 flexGrow: 1,
+                draggable: false,
+            },
+            {
+                prop: 'enterpriseId',
+                name: '',
+                innerTemplate: this.linkTemplate,
+                sortable: true,
+                flexGrow: 1,
+                draggable: false,
+            },
+            {
+                name: '',
+                innerTemplate: this.rowDeleteTemplate,
+                sortable: false,
+                width: 80,
+                canAutoResize: false,
+                resizeable: false,
                 draggable: false,
             },
         ];
@@ -120,5 +139,9 @@ export class ProjectComponent implements OnInit {
     onEnterpriseChange(row: ProjectRow, enterprise: string) {
         row.enterprise = enterprise;
         this.dataService.updateTableRow(row);
+    }
+
+    transformLink(value: string) {
+        return value.split('-')[0];
     }
 }

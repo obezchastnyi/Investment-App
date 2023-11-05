@@ -11,6 +11,7 @@ export interface Enterprise {
 
 export interface EnterpriseRow extends DataTableRow {
     id: string,
+    internalId: string;
     name: string;
     address: string;
     bankAccount: string;

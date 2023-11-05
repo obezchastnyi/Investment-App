@@ -8,40 +8,49 @@
     <div class="header-nav col-xs-6">
       <ul class="nav">
         <li class="nav-item mr-3" [ngClass]="{ 'd-none': role != 'Admin' && role != 'Creator' }">
-          <a class="nav-link badge badge-info" routerLink="/calculation"><h4 class="">Calculation</h4></a>
+          <a class="nav-link badge badge-info" routerLink="/calculation">
+            <h6 class="">Calculation</h6>
+          </a>
         </li>
         <li class="nav-item mr-3" [ngClass]="{ 'd-none': role != 'Admin' && role != 'Creator' }">
-          <a class="nav-link badge badge-info" routerLink="/forecasting"><h4 class="">Forecasting</h4></a>
+          <a class="nav-link badge badge-info" routerLink="/forecasting">
+            <h6 class="">Forecasting</h6>
+          </a>
         </li>
         <li class="nav-item mr-3" [ngClass]="{ 'd-none': role != 'Admin' && role != 'Creator' }">
-          <a class="nav-link badge badge-info" routerLink="/assessment"><h4 class="">Assessment</h4></a>
+          <a class="nav-link badge badge-info" routerLink="/assessment">
+            <h6 class="">Assessment</h6>
+          </a>
         </li>
         <li class="nav-item mr-3" [ngClass]="{ 'd-none': role != 'Admin' && role != 'Writer' }">
-          <a class="nav-link badge badge-info" routerLink="/evaluation"><h4 class="">Evaluation</h4></a>
+          <a class="nav-link badge badge-info" routerLink="/evaluation">
+            <h6 class="">Evaluation</h6>
+          </a>
         </li>
         <li class="nav-item mr-3" [ngClass]="{ 'd-none': role != 'Admin' && role != 'Reader' }">
-          <a class="nav-link badge badge-info" routerLink="/formation"><h4 class="">Formation</h4></a>
+          <a class="nav-link badge badge-info" routerLink="/formation">
+            <h6 class="">Formation</h6>
+          </a>
         </li>
-        <!-- <li class="nav-item ml-3">
-          <a class="nav-link badge badge-info" routerLink="/users"
-             [ngClass]="{ 'disabled': role != 'Admin' }"><h4 class="">Users</h4></a>
-        </li> -->
       </ul>
     </div>
 
     <div class="col-xs-6">
       <form class="form-inline">
         <a routerLink="/user-page">
-          <span class="username badge badge-primary">
-            <h6>{{ userName }}</h6>
-          </span>
-          <span class="password badge badge-info">
-            <h6>{{ role }}</h6>
-          </span>
+          <h6 style="padding-top: 10px; margin-right: 10px; color: white;">{{ userName }} [{{ role }}]</h6>
         </a>
 
-        <button class="logout-btn btn btn-outline-danger" type="button" (click)="logout()">Logout</button>
+        <a routerLink="/user-page">
+          <fa-icon style="color: white;" [icon]="faUser"></fa-icon>
+        </a>
       </form>
+    </div>
+
+    <div class="col-xs-6" style="margin-left: 30px;" *ngIf="currentUrl == '/'">
+      <button class="btn" id="menu-toggle" (click)="onToggle()">
+        <span class="navbar-toggler-icon"></span>
+      </button>
     </div>
   </div>
 </nav>

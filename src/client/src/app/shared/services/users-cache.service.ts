@@ -62,6 +62,7 @@ export class UsersCacheService {
         ]).subscribe(([users, roles]) => {
             let data: UserRow[] = users.map(u => ({
                 id: u.id.toString(),
+                internalId: `${u.id.toString().split('-')[0]}***`,
                 userName: u.userName,
                 role: u.userRole.code,
             }));

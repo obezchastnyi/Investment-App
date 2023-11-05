@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
 import { ExpertIndustryComponent, IndustryComponent } from '.';
+import { IndustryRoutingModule } from './industry-routing.module';
 
 @NgModule({
     declarations: [
@@ -10,8 +11,7 @@ import { ExpertIndustryComponent, IndustryComponent } from '.';
     ],
     imports: [
         CommonModule,
-        IndustryComponent,
-        ExpertIndustryComponent,
+        IndustryRoutingModule,
         SharedModule,
     ],
 })

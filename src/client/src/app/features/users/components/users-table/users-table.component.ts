@@ -33,6 +33,14 @@ export class UsersTableComponent implements OnInit {
     ngOnInit(): void {
         const USERS_TABLE_COLUMNS: DataTableColumn[] = [
             {
+                prop: 'internalId',
+                name: 'ID',
+                sortable: true,
+                width: 100,
+                flexGrow: 1,
+                draggable: false,
+            },
+            {
                 prop: 'userName',
                 name: 'UserName',
                 innerTemplate: this.inputTemplate,
