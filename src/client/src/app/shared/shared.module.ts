@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
@@ -21,6 +21,7 @@ import { EnterpriseCacheService } from './services/enterprise-cache.service';
     ],
     providers: [
         EnterpriseCacheService,
+        DatePipe,
     ],
     exports: [
         FormsModule,

@@ -1,9 +1,11 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { AuthenticationService, ProjectCacheService } from '../../../../shared/services';
-import { ProjectRow, DataTableColumn } from '../../../../models';
-import { Enterprise } from 'src/app/models/enterprise';
+import { AuthenticationService } from '../../../../shared/services';
+import { DataTableColumn, ProjectRow } from '../../../../models';
+import { faLink } from '@fortawesome/free-solid-svg-icons';
+import { ExpertProjectRow } from 'src/app/models/expert-project';
+import { ExpertProjectCacheService } from 'src/app/shared/services/expert-project-cache.service';
 
 @Component({
     selector: 'ia-expert-project',
@@ -12,24 +14,31 @@ import { Enterprise } from 'src/app/models/enterprise';
 })
 export class ExpertProjectComponent implements OnInit {
 
+    faLink = faLink;
+
     @ViewChild('inputTemplate', { static: true }) inputTemplate: TemplateRef<unknown>;
     @ViewChild('rowDeleteTemplate', { static: true }) rowDeleteTemplate: TemplateRef<unknown>;
     @ViewChild('dropdownTemplate', { static: true }) dropdownTemplate: TemplateRef<unknown>;
+    @ViewChild('linkTemplate', { static: true }) linkTemplate: TemplateRef<unknown>;
+    @ViewChild('link2Template', { static: true }) link2Template: TemplateRef<unknown>;
+    @ViewChild('link3Template', { static: true }) link3Template: TemplateRef<unknown>;
 
     tableHeight = window.innerHeight - 150;
 
     projectsTableColumnsObs: Observable<DataTableColumn[]>;
-    projectsTableRowsObs: Observable<ProjectRow[] | null>;
-    updatedProjects: ProjectRow[] = []
+    projectsTableRowsObs: Observable<ExpertProjectRow[] | null>;
+    updatedData: ExpertProjectRow[] = []
 
     userName: string;
     role: string;
 
-    enterprisesObs: Observable<Enterprise[] | null>;
+    //projectsObs: Observable<ProjectRow[] | null>;
+    //projectsObs: Observable<ProjectRow[] | null>;
+    projectsObs: Observable<ProjectRow[] | null>;
 
     constructor(private titleService: Title,
-        private dataService: ProjectCacheService,
-        private authService: AuthenticationService
+        private dataService: ExpertProjectCacheService,
+        private authService: AuthenticationService,
     ) {
         this.titleService.setTitle('Expert Project - Investments');
 
@@ -40,64 +49,102 @@ export class ExpertProjectComponent implements OnInit {
     ngOnInit(): void {
         const PROJECT_TABLE_COLUMNS: DataTableColumn[] = [
             {
+                prop: 'internalId',
+                name: 'ID',
+                sortable: true,
+                width: 100,
+                flexGrow: 1,
+                draggable: false,
+            },
+            {
+                prop: 'cashFlowRate',
+                name: 'Cash Flow Rate',
+                innerTemplate: this.inputTemplate,
+                sortable: true,
+                width: 150,
+                flexGrow: 1,
+                draggable: false,
+            },
+            {
+                prop: 'possibility',
+                name: 'Possibility',
+                //innerTemplate: this.dropdownTemplate,
+                sortable: true,
+                flexGrow: 1,
+                draggable: false,
+            },
+            {
+                prop: 'possibilityId',
+                name: '',
+                innerTemplate: this.linkTemplate,
+                sortable: true,
+                flexGrow: 1,
+                draggable: false,
+            },
+            {
+                prop: 'period',
+                name: 'Period',
+                //innerTemplate: this.dropdownTemplate,
+                sortable: true,
+                flexGrow: 1,
+                draggable: false,
+            },
+            {
+                prop: 'periodId',
+                name: '',
+                innerTemplate: this.link2Template,
+                sortable: true,
+                flexGrow: 1,
+                draggable: false,
+            },
+            {
+                prop: 'project',
+                name: 'Project',
+                innerTemplate: this.dropdownTemplate,
+                sortable: true,
+                flexGrow: 1,
+                draggable: false,
+            },
+            {
+                prop: 'projectId',
+                name: '',
+                innerTemplate: this.link3Template,
+                sortable: true,
+                flexGrow: 1,
+                draggable: false,
+            },
+            {
                 name: '',
                 innerTemplate: this.rowDeleteTemplate,
                 sortable: false,
-                width: 100, // 13 for the checkbox + 28 default left padding + 9 right padding
+                width: 80,
                 canAutoResize: false,
                 resizeable: false,
-                draggable: false,
-            },
-            {
-                prop: 'name',
-                name: 'Name',
-                innerTemplate: this.inputTemplate,
-                sortable: true,
-                width: 300,
-                flexGrow: 1,
-                draggable: false,
-            },
-            {
-                prop: 'startingInvestmentSum',
-                name: 'Starting Investment Sum',
-                innerTemplate: this.inputTemplate,
-                sortable: true,
-                width: 300,
-                flexGrow: 1,
-                draggable: false,
-            },
-            {
-                prop: 'enterprise',
-                name: 'Enterprise',
-                innerTemplate: this.dropdownTemplate,
-                sortable: true,
-                width: 300,
-                flexGrow: 1,
                 draggable: false,
             },
         ];
         this.projectsTableColumnsObs = new BehaviorSubject<DataTableColumn[]>(PROJECT_TABLE_COLUMNS).asObservable();
         this.projectsTableRowsObs = this.dataService.getTableRows();
 
-        //this.enterprisesObs = this.dataService.getEnterprises();
+        this.projectsObs = this.dataService.getProjects();
     }
 
-    onInputChange(row: ProjectRow, value: any, column: string) {
+    onInputChange(row: ExpertProjectRow, value: any, column: string) {
         let changedRow = { ...row };
-        if (this.updatedProjects.indexOf(changedRow) === -1) {
-            this.updatedProjects.push(changedRow)
+        if (this.updatedData.indexOf(changedRow) === -1) {
+            this.updatedData.push(changedRow)
         }
 
-        this.updatedProjects[(this.updatedProjects.indexOf(changedRow))][column] = value;
+        this.updatedData[(this.updatedData.indexOf(changedRow))][column] = value;
     }
 
-    onRowUpdate(row: ProjectRow, value: any, column: string) {
+    onRowUpdate(row: ExpertProjectRow, value: any, column: string) {
         let updatedRow = { ...row };
         updatedRow[column] = value;
         this.dataService.updateTableRow(updatedRow);
     }
 
-    onRowDelete(row: ProjectRow) {
+    onRowDelete(row: ExpertProjectRow) {
         this.dataService.confirmRowDeleting(row.id);
     }
 
@@ -110,15 +157,19 @@ export class ExpertProjectComponent implements OnInit {
     }
 
     confirmAllUpdates() {
-        if (this.updatedProjects.find(p => p.name == '' || p.startingInvestmentSum.toString() == '')) {
+        if (this.updatedData.find(d => Object.values(d).find(v => v.toString() === ''))) {
             alert('There are invalid fields in Table');
             return;
         }
-        this.dataService.confirmAllUpdates(this.updatedProjects);
+        this.dataService.confirmAllUpdates(this.updatedData);
     }
 
-    onEnterpriseChange(row: ProjectRow, enterprise: string) {
-        row.enterprise = enterprise;
+    onProjectChange(row: ExpertProjectRow, value: string) {
+        row.project = value;
         this.dataService.updateTableRow(row);
+    }
+
+    transformLink(value: string) {
+        return value.split('-')[0];
     }
 }

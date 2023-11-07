@@ -42,8 +42,8 @@ export class PeriodCacheService {
         let row = this.loadedPeriodsSub.value
             .find(p => p.id == period.id);
 
-        row.startDate = period.startDate;
-        row.endDate = period.endDate;
+        //row.startDate = period.startDate;
+        //row.endDate = period.endDate;
         row.discountRate = period.discountRate;
         row.riskFreeDiscountRate = period.riskFreeDiscountRate;
 
@@ -61,8 +61,8 @@ export class PeriodCacheService {
     private updateDataByApi(period: PeriodRow): void {
         this.http.put(`${this.serverUrl}enterprise`, {
             id: period.id,
-            startDate: period.startDate,
-            endDate: period.endDate,
+            //startDate: period.startDate,
+            //endDate: period.endDate,
             discountRate: period.discountRate,
             riskFreeDiscountRate: period.riskFreeDiscountRate,
         }).subscribe(() => { },
@@ -76,8 +76,8 @@ export class PeriodCacheService {
         periods.forEach(p => {
             body.push({
                 id: p.id,
-                startDate: p.startDate,
-                endDate: p.endDate,
+                //startDate: p.startDate,
+                //endDate: p.endDate,
                 discountRate: p.discountRate,
                 riskFreeDiscountRate: p.riskFreeDiscountRate,
             })

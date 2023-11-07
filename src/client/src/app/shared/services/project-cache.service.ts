@@ -13,7 +13,7 @@ export class ProjectCacheService {
 
     serverUrl = `${APP_SETTINGS.SERVER_BASE_URL}${APP_SETTINGS.SERVER_CURRENT_VERSION}`;
 
-    private loadedProjectsSub = new BehaviorSubject<ProjectRow[] | null>(null);
+    public loadedProjectsSub = new BehaviorSubject<ProjectRow[] | null>(null);
     private loadedEnterprisesSub = new BehaviorSubject<EnterpriseRow[] | null>(null);
 
     constructor(private http: HttpClient, enterpriseCacheService: EnterpriseCacheService) {
