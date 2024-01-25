@@ -30,7 +30,8 @@ public class HomeController : Controller
     [Route("/")]
     public IActionResult Home()
     {
-        var info = $"{Assembly.GetEntryAssembly().GetName().Name}: {Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion}";
+        var assembly = Assembly.GetEntryAssembly();
+        var info = $"{assembly?.GetName().Name}: {FileVersionInfo.GetVersionInfo(assembly?.Location ?? string.Empty).FileVersion}";
         return this.Ok(info);
     }
 

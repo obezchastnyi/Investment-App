@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,7 +31,7 @@ public class SwaggerOptions : IConfigureOptions<SwaggerGenOptions>
     private static OpenApiInfo CreateInfoForApiVersion(ApiVersionDescription description)
     {
         var assembly = Assembly.GetEntryAssembly();
-        var version = assembly?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+        var version = FileVersionInfo.GetVersionInfo(assembly?.Location ?? string.Empty).FileVersion;
 
         var info = new OpenApiInfo
         {
